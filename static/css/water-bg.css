@@ -1,0 +1,121 @@
+/* static/css/water-bg.css
+Бело-синяя цветовая гамма, плавные волны
+для подключения в шаблоне
+*/
+
+:root{
+  --water-blue-1: #eaf6ff; /* очень светлый голубой */
+  --water-blue-2: #bfe7ff; /* светло-голубой */
+  --water-blue-3: #7fcfff; /* средний голубой */
+  --water-blue-4: #2e9fff; /* насыщенный голубой */
+  --water-white: #ffffff;
+}
+
+
+/* Контейнер фоновой секции */
+.water-bg-wrap{
+  position: relative;
+  overflow: hidden; /* скрыть выступающие части волны */
+  background: linear-gradient(180deg, var(--water-white) 0%, var(--water-blue-1) 40%, var(--water-blue-2) 100%);
+  min-height: 320px;             /* Уменьшено с 420 */
+  display: flex;
+  align-items: center;           /* вертикальное центрирование контента */
+  justify-content: center;
+  padding: 48px 16px 120px;      /* нижний padding — резерв под волны */
+  box-sizing: border-box;
+
+}
+
+/* Сам фон: svg-волны растянуты на всю ширину */
+.water-bg{
+  position: absolute;
+  inset: 0; /* топ/право/низ/лево = 0 */
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* фон не мешает кликам */
+  z-index: 1;           /* ниже контента */
+  display: flex;
+  align-items: flex-end; /* держим svg у нижнего края обёртки */
+}
+
+
+/* Контент поверх фона */
+.water-bg-content{
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 100px;
+  color: #003366;
+  text-align: center;
+}
+
+/* Несколько слоёв волн внутри svg — анимация смещения по X */
+.wave-layer{
+  transform-origin: 50% 50%;
+  opacity: 0.9;
+}
+
+
+/* анимация сдвига волн по X (плавное зацикливание) */
+@keyframes waveFloat {
+  from { transform: translateX(0); }
+  to { transform: translateX(-25%); }
+}
+
+/* более медленные задние слои */
+.wave-layer.back { animation: waveFloat 18s linear infinite; }
+.wave-layer.mid { animation: waveFloat 12s linear infinite; }
+.wave-layer.front{ animation: waveFloat 8s linear infinite; }
+
+
+/* Масштабирование SVG для сохрания резкости на ретина */
+.water-svg {
+  display: block;
+  width: 160%;                   /* чуть шире для анимации */
+  max-width: none;
+  height: auto;
+  transform: translateX(-50%);
+  left: 50%;
+  position: relative;
+  /* смещение вниз чтобы волны выглядели \"на краю\" */
+  bottom: -2px;
+}
+
+/* Простейшая анимация слоёв, если svg имеет классы */
+.wave-layer{ opacity: 0.95; transform-origin: 50% 50%; }
+@keyframes waveFloat { from{ transform: translateX(0); } to{ transform: translateX(-25%); } }
+  .wave-layer.back  { animation: waveFloat 18s linear infinite; }
+  .wave-layer.mid   { animation: waveFloat 12s linear infinite; }
+  .wave-layer.front { animation: waveFloat 8s linear infinite; }
+
+
+/* Мягкая тень у нижней части (опционально) */
+.water-bg-shadow{
+  position: absolute;
+  left:0; right:0; bottom:0;
+  height: 60px;
+  background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(0,0,0,0.04) 100%);
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Пример ограничений по высоте секции */
+.section-hero{
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* Mobile tweaks */
+@media (max-width: 600px){
+  .water-bg-wrap{ min-height: 320px; padding-bottom: 90px; padding-top: 28px; }
+  .water-svg{ width: 220%; bottom: -8px; }
+  .water-bg-content{ padding: 0 12px; }
+}

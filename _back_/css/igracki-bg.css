@@ -1,0 +1,131 @@
+/* static/css/igracki-bg.css
+Тёплая красно-розово-белая цветовая гамма, плавные волны
+для подключения в при сбоях загрузки картинки основного фона игрушек
+*/
+
+:root {
+  --toy-pink-1: #fff0f5;  /* очень светлый розовый */
+  --toy-pink-2: #ffd6e0;  /* светло-розовый */
+  --toy-pink-3: #ff99b7;  /* средний розовый */
+  --toy-pink-4: #ff5573;  /* насыщенный малиновый */
+  --toy-white: #ffffff;
+}
+
+/* Контейнер фоновой секции */
+.igracki-bg-wrap {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    var(--toy-white) 0%,
+    var(--toy-pink-1) 40%,
+    var(--toy-pink-2) 100%
+  );
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px 120px;
+  box-sizing: border-box;
+}
+
+/* Сам фон: svg-волны */
+.igracki-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+}
+
+
+/* Контент поверх фона */
+.igracki-bg-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 100px;
+  color: #5a0020;
+  text-align: center;
+}
+
+/* Волны */
+.wave-layer {
+  transform-origin: 50% 50%;
+  opacity: 0.9;
+}
+
+@keyframes waveFloat {
+  from { transform: translateX(0); }
+  to { transform: translateX(-25%); }
+}
+
+.wave-layer.back  { animation: waveFloat 18s linear infinite; }
+.wave-layer.mid   { animation: waveFloat 12s linear infinite; }
+.wave-layer.front { animation: waveFloat 8s linear infinite; }
+
+/* SVG адаптив */
+.igracki-svg {
+  display: block;
+  width: 160%;
+  max-width: none;
+  height: auto;
+  transform: translateX(-50%);
+  left: 50%;
+  position: relative;
+  bottom: -2px;
+}
+
+/* Мягкая тень */
+.igracki-bg-shadow {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 60px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(0, 0, 0, 0.05) 100%
+  );
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Адаптив */
+@media (max-width: 768px){
+  .igracki-bg-wrap{
+    min-height: 260px;
+    padding-bottom: 60px;
+    padding-top: 20px;
+  }
+  .igracki-svg{
+    width: 220%;
+    bottom: -8px;
+  }
+}
+
+@media (max-width: 600px) {
+  .igracki-bg-wrap {
+    min-height: 320px;
+    padding-bottom: 90px;
+    padding-top: 28px;
+  }
+
+  .igracki-svg {
+    width: 220%;
+    bottom: -8px;
+  }
+
+  .igracki-bg-content {
+    padding: 0 12px;
+  }
+}

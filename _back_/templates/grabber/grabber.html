@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Играчки - Ledeni Breg{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="{% static 'css/map.css' %}">
+<link rel="stylesheet" href="{% static 'css/grabber.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="toys-page">
+    <!-- Секция с фоном: заголовок + фото + информация -->
+    <div class="grabber-content-with-bg">
+        <!-- Фон SVG как fallback -->
+        <div class="igracki-bg-wrap">
+            <div class="igracki-bg" aria-hidden="true"
+                style="background-image: url('{% static 'images/full-toys-bg.png' %}');">
+            </div>
+        </div>
+
+        <!-- Контент поверх фона -->
+        <div class="container">
+            <!-- Герой секция с заголовком -->
+            <div class="hero-content">
+                <div class="title-backdrop">
+                    <h1 class="page-title">Наши автоматы с игрушками</h1>
+                    {% comment %} <p class="hero-subtitle">Захватывающие развлечения для детей и взрослых</p> {% endcomment %}
+                </div>
+            </div>
+
+            <!-- Блок с автоматом и текстом -->
+            <div class="automats-block">
+                <div class="automat-content">
+                    <div class="automat-image">
+                        <img src="{% static 'images/automats/automat-red.png' %}" alt="Играчки автомат Ledeni Breg" class="automat-img">
+                    </div>
+                    <div class="automat-text">
+                        <h2>Весёлые игрушки для всех</h2>
+                        <div class="text-content">
+                            <p>Забавные и захватывающие автоматы с игрушками для детей и взрослых!
+                            Наши аппараты установлены в торговых центрах, развлекательных комплексах
+                            и других популярных местах по всей Сербии.</p>
+
+                            <p>Широкий выбор игрушек, мягких животных и коллекционных предметов.
+                            Простой в использовании интерфейс делает процесс игры удобным и приятным
+                            для пользователей всех возрастов.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Блок интерактивной карты -->
+    <div class="map-section">
+        <div class="container">
+            <h2 class="section-title">Найдите автомат рядом с вами</h2>
+            <p class="map-hint" style="text-align: center; color: #666; margin-bottom: 1rem;">
+                Используйте кнопку <strong>📋</strong> для просмотра списка всех точек
+            </p>
+            <div id="grabber-map" class="interactive-map"></div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="{% static 'js/map-common.js' %}"></script>
+<script src="{% static 'js/grabber-map.js' %}"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const page = document.querySelector('.toys-page');
+    const testImg = new Image();
+
+    testImg.onload = function() {
+        console.log('✅ PNG background loaded successfully.');
+    };
+
+    testImg.onerror = function() {
+        console.warn('⚠️ PNG background failed to load, switching to SVG fallback.');
+        page.classList.add('bg-fallback');
+
+        // Безопасное создание SVG фона без innerHTML
+        const svgWrap = document.createElement('div');
+        svgWrap.className = 'igracki-bg-wrap';
+
+        const innerDiv = document.createElement('div');
+        innerDiv.className = 'igracki-bg';
+
+        const svgImg = document.createElement('img');
+        svgImg.src = "{% static 'images/igracki.svg' %}";
+        svgImg.alt = '';
+        svgImg.className = 'igracki-svg';
+
+        innerDiv.appendChild(svgImg);
+        svgWrap.appendChild(innerDiv);
+        page.prepend(svgWrap);
+    };
+
+    // Проверяем загрузку PNG
+    testImg.src = "{% static 'images/full-toys-bg.png' %}";
+});
+</script>
+<script>
+    // Безопасная передача данных из Django в JavaScript
+    const grabberPoints = [
+        {% for point in grabber_points %}
+        {
+            id: {{ point.id|default:"0" }},
+            name: "{{ point.name|default:"Точка"|escapejs }}",
+            address: "{{ point.address|default:"Адрес не указан"|escapejs }}",
+            city: "{{ point.city|default:"Город не указан"|escapejs }}",
+            lat: {{ point.latitude|default:"44.0165"|stringformat:".6f" }},
+            lng: {{ point.longitude|default:"21.0059"|stringformat:".6f" }}
+        }{% if not forloop.last %},{% endif %}
+        {% empty %}
+        // Демо-данные если точек нет
+        {
+            id: 1,
+            name: "Белград Игрушки (демо)",
+            address: "Торговый центр",
+            city: "Белград",
+            lat: 44.812874,
+            lng: 20.475132
+        }
+        {% endfor %}
+    ];
+
+    // Отладочная информация
+    console.log('Grabber points data:', grabberPoints);
+
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM loaded, initializing grabber map...');
+        if (typeof initGrabberMap === 'function') {
+            initGrabberMap(grabberPoints);
+        } else {
+            console.error('initGrabberMap function not found');
+            // Fallback - безопасное отображение ошибки
+            const mapElement = document.getElementById('grabber-map');
+            if (mapElement && typeof showErrorMessage === 'function') {
+                showErrorMessage(mapElement, new Error('Функция инициализации карты не найдена'));
+            } else if (mapElement) {
+                // Резервный вариант если showErrorMessage не доступен
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'map-error';
+
+                const title = document.createElement('h3');
+                title.textContent = 'Карта временно недоступна';
+                errorDiv.appendChild(title);
+
+                const message = document.createElement('p');
+                message.textContent = 'Функция инициализации карты не найдена. Попробуйте обновить страницу.';
+                errorDiv.appendChild(message);
+
+                mapElement.appendChild(errorDiv);
+            }
+        }
+    });
+</script>
+{% endblock %}

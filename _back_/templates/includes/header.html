@@ -1,0 +1,55 @@
+{% load static %}
+<header class="header">
+    <div class="header-container">
+        <!-- Логотип и бургер (мобильная версия) -->
+        <div class="header-left">
+            <button class="burger-menu" id="burger-menu" aria-label="Открыть меню">
+                <span class="burger-icon">☰</span>
+                <span class="close-icon">✕</span>
+            </button>
+
+            <a href="{% url 'home' %}" class="logo-link">
+                <img src="{% static 'images/logo.svg' %}" alt="Ledeni Breg" class="logo">
+                <div class="logo-text">
+                    <div>LEDENI</div>
+                    <div class="logo-text-2">BREG</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Основное меню (десктоп) -->
+        <nav class="main-nav">
+            <ul class="nav-list">
+                <li><a href="{% url 'about' %}">О nama</a></li>
+                <li class="dropdown">
+                {% comment %} ! проблема здесь! {% endcomment %}
+                    {% comment %} <a href="#services">Vrsta avtomata</a> {% endcomment %}
+                    <a href="javascript:void(0)">Vrsta avtomata</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'water' %}">Vodomat</a></li>
+                        <li><a href="{% url 'grabber' %}">Igracki</a></li>
+                    </ul>
+                </li>
+                <li><a href="#news">Nasi novine</a></li>
+                <li><a href="#press">Media o nama</a></li>
+                <li><a href="#contacts">Kontakts</a></li>
+            </ul>
+        </nav>
+
+        <!-- Действия (Viber + язык) -->
+        <div class="header-actions">
+            <a href="viber://chat?number=+381677898477" class="viber-call">
+                <span class="viber-text">📞 Viber: 067/789-8477</span>
+                <span class="viber-icon">📞</span>
+            </a>
+
+            <div class="language-switcher">
+                <select>
+                    <option value="sr">SR</option>
+                    <option value="ru">RU</option>
+                    <option value="en">EN</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</header>

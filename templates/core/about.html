@@ -1,0 +1,50 @@
+<!-- backend/templates/core/about.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}О фирме - Ledeni Breg{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/about.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="about-page">
+    <div class="container">
+        <h1 class="page-title">О фирме</h1>
+
+        <div class="about-content">
+            <div class="about-text">
+                <h2>Компания Ledeni Breg</h2>
+                <p>Мы являемся ведущей компанией по установке и обслуживанию автоматов в Сербии. С 2010 года мы предоставляем качественные услуги по установке водоматов и игровых автоматов.</p>
+
+                <h3>Наша миссия</h3>
+                <p>Сделать чистую питьевую воду и качественные развлечения доступными для каждого жителя Сербии.</p>
+
+                <h3>Наши ценности</h3>
+                <ul>
+                    <li>Качество обслуживания</li>
+                    <li>Надежность партнерства</li>
+                    <li>Инновационные решения</li>
+                    <li>Забота о клиентах</li>
+                </ul>
+            </div>
+
+            <div class="about-stats">
+                <div class="stat-item">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">установленных автоматов</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">городов Сербии</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">10+</div>
+                    <div class="stat-label">лет на рынке</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

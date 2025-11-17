@@ -1,0 +1,105 @@
+/* backend/static/css/about.css */
+.about-page {
+    padding: 2rem 0;
+    min-height: 100vh;
+    background: #f8f9fa;
+}
+
+.page-title {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: #1e3c72;
+    font-size: 2.5rem;
+}
+
+.about-content {
+    display: flex;
+    gap: 3rem;
+    align-items: flex-start;
+}
+
+.about-text {
+    flex: 2;
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.about-text h2 {
+    color: #1e3c72;
+    margin-bottom: 1rem;
+}
+
+.about-text h3 {
+    color: #2a5298;
+    margin: 1.5rem 0 0.5rem;
+}
+
+.about-text p {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.about-text ul {
+    margin-left: 1.5rem;
+    color: #333;
+}
+
+.about-text li {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+.about-stats {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.stat-item {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #1e3c72;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+    .about-content {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .about-text {
+        padding: 1.5rem;
+    }
+
+    .page-title {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-item {
+        padding: 1rem;
+    }
+
+    .stat-number {
+        font-size: 1.5rem;
+    }
+}

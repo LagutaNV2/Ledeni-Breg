@@ -1,0 +1,240 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/application.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="application-page">
+    <div class="container">
+        <div class="application-header">
+            <h1>Prijava za ugradnju automata</h1>
+            <p>Popunite formular ispod i naš tim će Vas kontaktirati u vezi postavljanja automata</p>
+        </div>
+
+        <!-- Сообщение об успехе (сценарий 1) -->
+        {% if show_success %}
+        <div class="success-container" id="successMessage">
+            <div class="success-icon">✓</div>
+            <h2>Uspešno ste poslali prijavu!</h2>
+            <p>Vaša prijava je uspešno poslata. Kontaktiraćemo Vas u najkraćem roku.</p>
+            <p class="countdown">Preusmeravanje na početnu stranu za <span id="countdown">60</span> sekundi...</p>
+            <a href="{% url 'home' %}" class="btn btn-home">Vratite se na početnu stranu</a>
+        </div>
+        {% endif %}
+
+        <!-- Форма (показывается только если нет успеха) -->
+        {% if not show_success %}
+        <form method="post" class="application-form" novalidate id="applicationForm">
+            {% csrf_token %}
+
+            <div class="form-section">
+                <h3>Informacije o automatu</h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.machine_type.id_for_label }}">Tip automata *</label>
+                        {{ form.machine_type }}
+                        {% if form.machine_type.errors %}
+                        <div class="error-text">{{ form.machine_type.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.quantity.id_for_label }}">Količina *</label>
+                        {{ form.quantity }}
+                        {% if form.quantity.errors %}
+                        <div class="error-text">{{ form.quantity.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Adresa postavljanja</h3>
+
+                <div class="form-group">
+                    <label for="{{ form.city.id_for_label }}">Grad *</label>
+                    {{ form.city }}
+                    {% if form.city.errors %}
+                    <div class="error-text">{{ form.city.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.street.id_for_label }}">Ulica *</label>
+                        {{ form.street }}
+                        {% if form.street.errors %}
+                        <div class="error-text">{{ form.street.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.building.id_for_label }}">Broj zgrade *</label>
+                        {{ form.building }}
+                        {% if form.building.errors %}
+                        <div class="error-text">{{ form.building.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Kontakt informacije</h3>
+
+                <div class="form-group">
+                    <label for="{{ form.full_name.id_for_label }}">Ime i prezime *</label>
+                    {{ form.full_name }}
+                    {% if form.full_name.errors %}
+                    <div class="error-text">{{ form.full_name.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.phone.id_for_label }}">Telefon *</label>
+                        {{ form.phone }}
+                        {% if form.phone.errors %}
+                        <div class="error-text">{{ form.phone.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.email.id_for_label }}">Email *</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                        <div class="error-text">{{ form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="{{ form.comment.id_for_label }}">Dodatne informacije ili želje</label>
+                    {{ form.comment }}
+                    {% if form.comment.errors %}
+                    <div class="error-text">{{ form.comment.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-submit">
+                <button type="submit" class="btn-submit">Pošaljite prijavu</button>
+            </div>
+        </form>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Модальное окно для ошибок -->
+{% if show_email_error or show_validation_error %}
+<div class="modal-overlay" id="errorModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Greška pri slanju</h3>
+        </div>
+        <div class="modal-content">
+            {% if show_email_error %}
+            <p>Vaša prijava je sačuvana, ali došlo je do greške pri slanju email obaveštenja. Kontaktiraćemo Vas putem telefona.</p>
+            {% elif show_validation_error %}
+            <p>Došlo je do greške u formularu. Molimo Vas ispravite označena polja ispod.</p>
+            {% endif %}
+        </div>
+        <div class="modal-buttons">
+            {% if show_email_error %}
+            <button type="button" class="btn btn-retry" onclick="retrySubmission()">Pokušajte ponovo</button>
+            {% else %}
+            <button type="button" class="btn btn-retry" onclick="closeModal()">Pokušajte ponovo</button>
+            {% endif %}
+            <a href="{% url 'home' %}" class="btn btn-home">Vratite se na početnu stranu</a>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<script>
+// Обработка успешной отправки
+{% if show_success %}
+document.addEventListener('DOMContentLoaded', function() {
+    let secondsLeft = 60;
+    const countdownElement = document.getElementById('countdown');
+    const countdownInterval = setInterval(() => {
+        secondsLeft--;
+        countdownElement.textContent = secondsLeft;
+
+        if (secondsLeft <= 0) {
+            clearInterval(countdownInterval);
+            window.location.href = "{% url 'home' %}";
+        }
+    }, 1000);
+
+    // Резервный переход через 60 секунд
+    setTimeout(() => {
+        clearInterval(countdownInterval);
+        window.location.href = "{% url 'home' %}";
+    }, 60000);
+});
+{% endif %}
+
+// Обработка модального окна с ошибками
+{% if show_email_error or show_validation_error %}
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('errorModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        // Блокируем скроллинг body
+        document.body.style.overflow = 'hidden';
+    }
+});
+
+function closeModal() {
+    const modal = document.getElementById('errorModal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+}
+
+function retrySubmission() {
+    // Для ошибки email - повторная отправка формы
+    document.getElementById('applicationForm').submit();
+}
+{% endif %}
+
+// Валидация телефона в реальном времени
+document.addEventListener('DOMContentLoaded', function() {
+    const phoneInput = document.querySelector('#id_phone');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value) {
+                if (value.startsWith('381')) {
+                    value = '+' + value;
+                } else if (!value.startsWith('+')) {
+                    value = '+381' + value;
+                }
+            }
+            e.target.value = value;
+        });
+    }
+});
+
+// Плавное появление формы
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('.application-form');
+    if (form) {
+        form.style.opacity = '0';
+        form.style.transform = 'translateY(20px)';
+
+        setTimeout(() => {
+            form.style.transition = 'all 0.6s ease-out';
+            form.style.opacity = '1';
+            form.style.transform = 'translateY(0)';
+        }, 100);
+    }
+});
+</script>
+{% endblock %}

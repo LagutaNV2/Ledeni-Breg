@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: ledenibreg
+    env: python
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn backend.ledenibreg.wsgi:application --chdir backend"
+    envVars:
+      - key: DEBUG
+        value: False
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
+      - key: DJANGO_SETTINGS_MODULE
+        value: ledenibreg.settings.production
+    # Добавьте другие переменные окружения через панель Render, например,
+    # DATABASE_URL, OPENCAGE_API_KEY и т.д.
+
+  - type: pgsql
+    name: ledenibreg-db
+    plan: free
+    ipAllowList: []  # только сервисы Render

@@ -1,0 +1,356 @@
+/* backend/static/css/water.css */
+
+/* Основной фон страницы игрушек - PNG как основной */
+.water-page {
+    min-height: 100vh;
+    background: url('../images/full-water-bg.png') no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* === FALLBACK: если PNG не загрузился === */
+.water-page.bg-fallback {
+    background: none !important; /* отключаем неработающий PNG */
+}
+
+/* Добавим мягкий переход при смене фона */
+.water-page,
+.water-page.bg-fallback {
+    transition: background 0.6s ease-in-out;
+}
+
+/* Секция с фоном волн */
+.water-content-with-bg {
+    position: relative;
+    padding: 1.5rem 0 2.5rem;
+    overflow: hidden;
+}
+
+/* Стили для SVG фона как fallback - скрываем на десктопе где работает PNG */
+.water-content-with-bg .water-bg-wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    min-height: auto;
+    /* Скрываем SVG на десктопе, показываем только при проблемах с PNG */
+    display: none;
+}
+
+.water-bg-wrap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.water-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.water-svg {
+    display: block;
+    width: 160%;
+    max-width: none;
+    height: auto;
+    transform: translateX(-50%);
+    left: 50%;
+    position: relative;
+    bottom: -2px;
+}
+
+
+.water-content-with-bg .container {
+    position: relative;
+    z-index: 2;
+}
+
+/* Прозрачность для контентных блоков */
+.water-page .automat-content,
+.water-page .content-block {
+    background: rgba(255, 255, 255, 0.60);
+    backdrop-filter: blur(10px);
+}
+
+/* Герой секция с заголовком */
+.hero-content {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem 0;
+}
+
+.page-title {
+    font-size: 2.2rem;
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+    color: #0e0a78;
+    text-shadow: 4px 4px 4px rgba(255,255,255,0.7);
+}
+
+.hero-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    font-weight: 300;
+    color: #2a5298;
+    text-shadow: 3px 3px 4px rgba(255,255,255,0.7);
+}
+
+/* Блок с автоматом и текстом */
+.automats-block {
+    margin-bottom: 2rem;
+}
+
+.automat-content {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow:
+        0 10px 30px rgba(30, 60, 114, 0.15),
+        0 0 0 1px rgba(74, 144, 226, 0.1),
+        0 0 30px rgba(74, 144, 226, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.automat-image {
+    flex: 1;
+    text-align: center;
+}
+
+.automat-img {
+    max-width: 100%;
+    height: auto;
+    max-height: 350px;
+    border-radius: 15px;
+    box-shadow:
+        0 15px 35px rgba(0, 0, 0, 0.1),
+        0 0 20px rgba(74, 144, 226, 0.2);
+    transition: all 0.3s ease;
+}
+
+.automat-img:hover {
+    transform: translateY(-5px);
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.15),
+        0 0 25px rgba(74, 144, 226, 0.3);
+}
+
+.automat-text {
+    flex: 1;
+}
+
+.automat-text h2 {
+    color: #1e3c72;
+    font-size: 1.8rem;
+    margin-bottom: 1.25rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.text-content p {
+    margin-bottom: 1.25rem;
+    line-height: 1.6;
+    font-size: 1.05rem;
+    color: #333;
+    text-align: left;
+}
+
+/* Блок инструкции (опцтонно) */
+.instruction-section {
+    background: #f8f9fa;
+    padding: 3rem 0;
+}
+
+.instruction-block {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow:
+        0 5px 20px rgba(30, 60, 114, 0.1),
+        0 0 0 1px rgba(74, 144, 226, 0.05),
+        0 0 20px rgba(74, 144, 226, 0.08);
+    max-width: 700px;
+    margin: 0 auto;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+}
+
+.instruction-block h2 {
+    text-align: center;
+    color: #1e3c72;
+    font-size: 1.7rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.instruction-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* Медиа-запросы для адаптивного фона */
+
+/* На мобильных устройствах показываем SVG фон и скрываем PNG */
+@media (max-width: 768px) {
+    .water-page {
+        background: none; /* Убираем PNG на мобильных */
+    }
+
+    .water-content-with-bg .water-bg-wrap {
+        display: block; /* Показываем SVG на мобильных */
+        background: linear-gradient(
+            180deg,
+            #ffffff 0%,
+            #e6f0ff 40%,
+            #b3d4ff 100%
+        );
+    }
+
+    .water-content-with-bg {
+        padding: 1rem 0 1.5rem;
+    }
+
+    .page-title {
+        font-size: 1.8rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+
+    .automat-content {
+        flex-direction: column;
+        gap: 2rem;
+        padding: 1.5rem;
+        border-radius: 15px;
+    }
+
+    .automat-img {
+        max-height: 280px;
+    }
+
+    .automat-text h2 {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+    .water-svg {
+        width: 220%;
+        bottom: -8px;
+    }
+}
+
+/* Fallback для случаев когда PNG не загружается */
+@media (min-width: 769px) {
+    /* Если PNG не загрузился, показываем SVG фон */
+    .water-page:not(.png-loaded) .water-bg-wrap {
+        display: block;
+        background: linear-gradient(
+            180deg,
+            #ffffff 0%,
+            #e6f0ff 40%,
+            #b3d4ff 100%
+        );
+    }
+}
+
+@media (max-width: 480px) {
+    .page-title {
+        font-size: 1.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .automat-content {
+        padding: 1.25rem 0.75rem;
+        gap: 1.25rem;
+    }
+
+    .automat-img {
+        max-height: 220px;
+    }
+
+    .automat-text h2 {
+        font-size: 1.3rem;
+    }
+
+    .text-content p {
+        font-size: 1rem;
+    }
+}
+
+/* Блок инструкции (опционально) */
+.instruction-section {
+    background: #f8f9fa;
+    padding: 3rem 0;
+}
+
+.instruction-block {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow:
+        0 5px 20px rgba(30, 60, 114, 0.1),
+        0 0 0 1px rgba(74, 144, 226, 0.05),
+        0 0 20px rgba(74, 144, 226, 0.08);
+    max-width: 700px;
+    margin: 0 auto;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+}
+
+.instruction-block h2 {
+    text-align: center;
+    color: #1e3c72;
+    font-size: 1.7rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.instruction-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 768px) {
+    .instruction-section {
+        padding: 2rem 0;
+    }
+
+    .instruction-block {
+        padding: 1.25rem;
+        border-radius: 12px;
+    }
+
+    .instruction-block h2 {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .instruction-block {
+        padding: 1rem;
+    }
+
+    .instruction-block h2 {
+        font-size: 1.2rem;
+    }
+}

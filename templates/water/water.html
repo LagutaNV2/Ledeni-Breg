@@ -1,0 +1,166 @@
+<!-- backend/templates/water/water.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Vodomat - Ledeni Breg{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+{% comment %} <link rel="stylesheet" href="{% static 'css/water-bg.css' %}" media="(min-width: 769px)">
+<link rel="stylesheet" href="{% static 'css/water-bg-mobil.css' %}" media="(max-width: 768px)"> {% endcomment %}
+<link rel="stylesheet" href="{% static 'css/map.css' %}">
+<link rel="stylesheet" href="{% static 'css/water.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="water-page">
+    <!-- Секция с фоном волн: заголовок + фото + информация -->
+    <div class="water-content-with-bg">
+        <div class="water-bg-wrap">
+            <div class="water-bg" aria-hidden="true"
+                style="background-image: url('{% static 'images/full_water-bg.png' %}');">
+            </div>
+        </div>
+
+        <!-- Контент поверх фона -->
+        <div class="container">
+            <!-- Герой секция с заголовком -->
+            <div class="hero-content">
+                <h1 class="page-title">Наши водоматы</h1>
+                <p class="hero-subtitle">Кристально чистая вода в удобных локациях по всей Сербии</p>
+            </div>
+
+            <!-- Блок с автоматом и текстом -->
+            <div class="automats-block">
+                <div class="automat-content">
+                    <div class="automat-image">
+                        <img src="{% static 'images/automats/automat-blu.png' %}" alt="Водомат Ledeni Breg" class="automat-img">
+                    </div>
+                    <div class="automat-text">
+                        <h2>Качественная питьевая вода</h2>
+                        <div class="text-content">
+                            <p>Наши водоматы предоставляют кристально чистую питьевую воду высшего качества.
+                            Установлены в удобных локациях по всей Сербии. Каждый автомат проходит регулярное
+                            обслуживание и контроль качества.</p>
+
+                            <p>Вода проходит многоступенчатую систему очистки, включая механическую фильтрацию,
+                            обратный осмос и ультрафиолетовую дезинфекцию. Мы гарантируем безопасность и
+                            отличный вкус нашей воды.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Блок инструкции (вне фона волн) -->
+
+    <!-- Блок интерактивной карты -->
+    <div class="map-section">
+        <div class="container">
+            <h2 class="section-title">Найдите водомат рядом с вами</h2>
+            <p class="map-hint" style="text-align: center; color: #666; margin-bottom: 1rem;">
+                Используйте кнопку <strong>📋</strong> для просмотра списка всех точек
+            </p>
+            <div id="water-map" class="interactive-map"></div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="{% static 'js/map-common.js' %}"></script>
+<script src="{% static 'js/water-map.js' %}"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const page = document.querySelector('.water-page');
+    const testImg = new Image();
+
+    testImg.onload = function() {
+        console.log('✅ PNG background loaded successfully.');
+    };
+
+    testImg.onerror = function() {
+        console.warn('⚠️ PNG background failed to load, switching to SVG fallback.');
+        page.classList.add('bg-fallback');
+
+        // Безопасное создание SVG фона без innerHTML
+        const svgWrap = document.createElement('div');
+        svgWrap.className = 'water-bg-wrap';
+
+        const innerDiv = document.createElement('div');
+        innerDiv.className = 'water-bg';
+
+        const svgImg = document.createElement('img');
+        svgImg.src = "{% static 'images/waves.svg' %}";
+        svgImg.alt = '';
+        svgImg.className = 'water-svg';
+
+        innerDiv.appendChild(svgImg);
+        svgWrap.appendChild(innerDiv);
+        page.prepend(svgWrap);
+    };
+
+    // Проверяем загрузку PNG
+    testImg.src = "{% static 'images/full_water-bg.png' %}";
+});
+</script>
+<script>
+        // Безопасная передача данных из Django в JavaScript
+    const waterPoints = [
+        {% for point in water_points %}
+        {
+            id: {{ point.id|default:"0" }},
+            name: "{{ point.name|default:"Точка"|escapejs }}",
+            address: "{{ point.address|default:"Адрес не указан"|escapejs }}",
+            city: "{{ point.city|default:"Город не указан"|escapejs }}",
+            lat: {{ point.latitude|default:"44.0165"|stringformat:".6f" }},
+            lng: {{ point.longitude|default:"21.0059"|stringformat:".6f" }}
+        }{% if not forloop.last %},{% endif %}
+        {% empty %}
+        // Демо-данные если точек нет
+        {
+            id: 1,
+            name: "Белград (демо)",
+            address: "Центр города",
+            city: "Белград",
+            lat: 44.802874,
+            lng: 20.465132
+        }
+        {% endfor %}
+    ];
+
+    // Отладочная информация
+    console.log('Water points data:', waterPoints);
+
+    // Инициализируем карту когда DOM загружен
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM loaded, initializing water map...');
+        if (typeof initWaterMap === 'function') {
+            initWaterMap(waterPoints);
+        } else {
+            console.error('initWaterMap function not found');
+            // Fallback - безопасное отображение ошибки
+            const mapElement = document.getElementById('water-map');
+            if (mapElement && typeof showErrorMessage === 'function') {
+                showErrorMessage(mapElement, new Error('Функция инициализации карты не найдена'));
+            } else if (mapElement) {
+                // Резервный вариант если showErrorMessage не доступен
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'map-error';
+
+                const title = document.createElement('h3');
+                title.textContent = 'Карта временно недоступна';
+                errorDiv.appendChild(title);
+
+                const message = document.createElement('p');
+                message.textContent = 'Функция инициализации карты не найдена. Попробуйте обновить страницу.';
+                errorDiv.appendChild(message);
+
+                mapElement.appendChild(errorDiv);
+            }
+        }
+    });
+</script>
+{% endblock %}

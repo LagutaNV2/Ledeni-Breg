@@ -1,0 +1,411 @@
+/* backend/static/css/map.css - ОБЩИЕ СТИЛИ ДЛЯ КАРТ */
+
+/* Блок карты */
+.map-section {
+    background: white;
+    padding: 3rem 0;
+}
+
+.section-title {
+    text-align: center;
+    color: #1e3c72;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    font-weight: 600;
+}
+
+.interactive-map {
+    position: relative;
+    height: 450px;
+    width: 100%;
+    border-radius: 15px;
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(74, 144, 226, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+/* Стили для попапов карты */
+.map-popup {
+    min-width: 200px;
+}
+
+.map-popup h3 {
+    color: #1e3c72;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.map-popup p {
+    margin: 0.3rem 0;
+    font-size: 0.9rem;
+}
+
+.map-popup strong {
+    color: #2a5298;
+}
+
+.demo-label {
+    color: #ff6b6b;
+    font-size: 0.8rem;
+    font-style: italic;
+    margin-top: 0.5rem;
+}
+
+/* Стили для элементов управления картой */
+.search-control {
+    background: white;
+    padding: 5px;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    display: flex;
+    gap: 5px;
+}
+
+.search-input {
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    margin-right: 5px;
+    padding: 5px 8px;
+    font-size: 14px;
+    width: 200px;
+}
+
+.search-button {
+    background: #1e3c72;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 5px 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.search-button:hover {
+    background: #2a5298;
+}
+
+.fullscreen-control,
+.points-control {
+    background: white;
+    border: none;
+    border-radius: 4px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    margin-bottom: 5px;
+}
+
+.fullscreen-control:hover,
+.points-control:hover {
+    background: #f5f5f5;
+}
+
+/* Улучшения для индикации загрузки */
+.search-control.searching .search-button {
+    opacity: 0.7;
+    cursor: not-allowed;
+    position: relative;
+}
+
+.search-control.searching .search-button::after {
+    content: '...';
+    animation: searching 1.5s infinite;
+    display: inline-block;
+    width: 20px;
+}
+
+@keyframes searching {
+    0% { content: '.'; }
+    33% { content: '..'; }
+    66% { content: '...'; }
+    100% { content: '.'; }
+}
+
+
+/* Стили для ошибок */
+.map-error {
+    padding: 40px 20px;
+    text-align: center;
+    color: #666;
+    background: #f8f9fa;
+    border-radius: 8px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.map-error h3 {
+    color: #dc3545;
+    margin-bottom: 1rem;
+}
+
+.error-details {
+    font-size: 12px;
+    color: #999;
+    margin-top: 1rem;
+}
+
+/* Стили для боковой панели v2*/
+.map-side-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 350px;
+    height: 100%;
+    background: white;
+    z-index: 1000;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.map-side-panel.active {
+    transform: translateX(0);
+}
+
+.map-with-side-panel {
+    padding-left: 350px;
+    transition: padding-left 0.3s ease;
+}
+
+/* Заголовок боковой панели */
+.side-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e9ecef;
+    background: #f8f9fa;
+    flex-shrink: 0;
+
+    min-height: 70px; /* Фиксированная высота для заголовка */
+    box-sizing: border-box;
+}
+
+.side-panel-header h3 {
+    margin: 0;
+    color: #1e3c72;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.side-panel-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #6c757d;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.side-panel-close:hover {
+    background: #e9ecef;
+    color: #1e3c72;
+}
+
+/* Список в боковой панели v2 */
+.side-panel-list {
+    flex: 1;
+    overflow-y: auto; /* Прокрутка по вертикали */
+    overflow-x: hidden;
+    padding: 1rem;
+    min-height: 0; /* Важно для flexbox */
+    max-height: calc(100% - 70px); /* Высота минус заголовок */
+    outline: none; /* Убеждаемся, что список может получать фокус */
+
+    /* Улучшаем производительность прокрутки */
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+
+}
+
+.side-panel-item {
+    padding: 1rem;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: white;
+    flex-shrink: 0; /* Предотвращает сжатие элементов */
+
+    /* Разрешаем события мыши */
+    pointer-events: auto;
+
+    /* Убираем выделение при клике */
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.side-panel-item:hover {
+    border-color: #1e3c72;
+    background: #f8f9fa;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(30, 60, 114, 0.1);
+}
+
+.side-panel-item.selected {
+    border-color: #1e3c72;
+    background: #f0f7ff;
+    box-shadow: 0 2px 8px rgba(30, 60, 114, 0.15);
+}
+
+.point-name {
+    font-weight: 600;
+    color: #1e3c72;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.point-address {
+    font-size: 0.875rem;
+    color: #6c757d;
+    line-height: 1.4;
+}
+
+.side-panel-empty {
+    text-align: center;
+    padding: 2rem;
+    color: #6c757d;
+    font-style: italic;
+}
+
+
+/* Стили для скроллбара */
+.side-panel-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.side-panel-list::-webkit-scrollbar-track {
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+.side-panel-list::-webkit-scrollbar-thumb {
+    background: #1e3c72;
+    border-radius: 4px;
+    opacity: 0.6;
+}
+
+.side-panel-list::-webkit-scrollbar-thumb:hover {
+    background: #2a5298;
+    opacity: 0.8;
+}
+
+/* Для Firefox */
+.side-panel-list {
+    scrollbar-width: thin;
+    scrollbar-color: #1e3c72 #f8f9fa;
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 768px) {
+    .map-section {
+        padding: 2rem 0;
+    }
+
+    .section-title {
+        font-size: 1.7rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .interactive-map {
+        height: 350px;
+    }
+
+    .search-input {
+        width: 140px;
+        font-size: 14px;
+    }
+
+    .search-control {
+        padding: 6px;
+    }
+
+    .fullscreen-control,
+    .points-control {
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+    }
+
+    .search-button {
+        padding: 5px;
+        font-size: 12px;
+    }
+
+    .map-side-panel {
+        width: 300px;
+    }
+
+    .map-with-side-panel {
+        padding-left: 300px;
+    }
+
+    .side-panel-header {
+        padding: 1rem;
+    }
+
+    .side-panel-list {
+        padding: 0.75rem;
+    }
+
+    .side-panel-item {
+        padding: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-title {
+        font-size: 1.5rem;
+    }
+
+    .interactive-map {
+        height: 300px;
+    }
+
+    .search-input {
+        width: 120px;
+    }
+
+    .map-side-panel {
+        width: 100%;
+    }
+
+    .map-with-side-panel {
+        /* padding-left: 280px; */
+    }
+
+    .points-modal-content {
+        width: 95%;
+        margin: 1rem;
+    }
+
+    .side-panel-header h3 {
+        font-size: 1.1rem;
+    }
+
+    .point-name {
+        font-size: 0.95rem;
+    }
+}
