@@ -1,0 +1,6 @@
+<!-- static/images/igracki.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none">
+  <path class="wave-layer back" fill="#ffd6e0" d="M0,64L80,85.3C160,107,320,149,480,165.3C640,181,800,171,960,149.3C1120,128,1280,96,1360,80L1440,64V320H0Z"/>
+  <path class="wave-layer mid" fill="#ffb6c1" d="M0,160L120,181.3C240,203,480,245,720,234.7C960,224,1200,160,1320,128L1440,96V320H0Z"/>
+  <path class="wave-layer front" fill="#ff8fa3" d="M0,256L120,245.3C240,235,480,213,720,192C960,171,1200,149,1320,138.7L1440,128V320H0Z"/>
+</svg>

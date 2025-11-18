@@ -11,6 +11,10 @@ from django.template.loader import render_to_string
 from apps.applications.forms import ApplicationForm
 from apps.applications.models import Application
 
+import os
+from django.core.mail import send_mail
+from django.http import JsonResponse
+
 import logging
 
 logger = logging.getLogger('apps.core')
@@ -131,3 +135,38 @@ Datum prijave: {application.created_date.strftime('%d.%m.%Y %H:%M')}"""
         # GET запрос - показываем пустую форму
         form = ApplicationForm()
         return render(request, 'applications/application.html', {'form': form})
+
+# отладочная функция для проверки подключения к базе данных
+def debug_database(request):
+    """Диагностика базы данных"""
+    debug_info = {
+        'database_url': os.environ.get('DATABASE_URL', 'Not set'),
+        'database_engine': settings.DATABASES['default']['ENGINE'],
+        'database_name': settings.DATABASES['default']['NAME'],
+        'water_points_count': 0,
+        'grabber_points_count': 0,
+    }
+
+    try:
+        from apps.map_points.models import WaterPoint, GrabberPoint
+        debug_info['water_points_count'] = WaterPoint.objects.count()
+        debug_info['grabber_points_count'] = GrabberPoint.objects.count()
+        debug_info['database_status'] = 'Connected'
+    except Exception as e:
+        debug_info['database_status'] = f'Error: {str(e)}'
+
+    return JsonResponse(debug_info)
+
+# отладочная функция для тестовой отправки email
+def test_email(request):
+    try:
+        send_mail(
+            'Test Email from Ledeni Breg',
+            'This is a test email from your Django application.',
+            settings.DEFAULT_FROM_EMAIL,
+            [settings.APPLICATION_EMAIL],
+            fail_silently=False,
+        )
+        return JsonResponse({'status': 'Email sent successfully'})
+    except Exception as e:
+        return JsonResponse({'status': f'Email failed: {str(e)}'})

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #9edcf3;
+      }
+
+      .cls-2 {
+        fill: #cbebf9;
+      }
+
+      .cls-3 {
+        fill: #489dd6;
+      }
+
+      .cls-4 {
+        fill: #ed1262;
+      }
+
+      .cls-5 {
+        fill: #51afe2;
+      }
+
+      .cls-6 {
+        fill: none;
+      }
+
+      .cls-7 {
+        fill: #9ad7f6;
+      }
+
+      .cls-8 {
+        fill: #75cbf2;
+      }
+    </style>
+  </defs>
+  <polyline class="cls-2" points="156.35 637.56 328.22 637.56 586.03 207.88 500.1 64.65"/>
+  <line class="cls-2" x1="500.1" y1="64.65" x2="156.35" y2="637.56"/>
+  <polyline class="cls-7" points="843.84 637.56 586.03 207.88 500.1 351.11 671.97 637.56 843.84 637.56"/>
+  <polygon class="cls-8" points="500.1 351.11 328.22 637.56 671.97 637.56 500.1 351.11"/>
+  <rect class="cls-4" x="500.77" y="637.77" width=".56" height=".56"/>
+  <polygon class="cls-8" points="319.75 637.56 408.98 786.41 586.22 786.41 675.45 637.56 319.75 637.56"/>
+  <polyline class="cls-3" points="843.84 637.56 671.97 637.56 586.03 786.41 671.97 935.25 843.84 637.56"/>
+  <polyline class="cls-1" points="156.35 637.56 328.22 935.25 414.16 786.41 328.22 637.56 156.35 637.56"/>
+  <polygon class="cls-5" points="414.16 786.41 328.22 935.25 671.97 935.25 586.03 786.41 414.16 786.41"/>
+  <line class="cls-6" x1="500.77" y1="638.33" x2="495.73" y2="635.4"/>
+</svg>

@@ -2,6 +2,7 @@
 
 from django.urls import path
 from . import views
+from apps.core.views import debug_database # Импортируем новую отладочную страницу
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -12,4 +13,5 @@ urlpatterns = [
     path('press/', views.press, name='press'),
     path('contacts/', views.contacts, name='contacts'),
     path('application/', views.application, name='application'),
+    path('debug/database/', debug_database, name='debug_database'), # Новая отладочная страница
 ]

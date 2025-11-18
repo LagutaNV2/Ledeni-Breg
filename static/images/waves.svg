@@ -1,0 +1,32 @@
+<!-- waves.svg - три слоя. Сохраните в UTF-8. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 400" preserveAspectRatio="xMidYMax slice">
+<defs>
+<linearGradient id="g1" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#ffffff"/>
+<stop offset="100%" stop-color="#eaf6ff"/>
+</linearGradient>
+<linearGradient id="g2" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#bfe7ff"/>
+<stop offset="100%" stop-color="#7fcfff"/>
+</linearGradient>
+</defs>
+<!-- Back wave (медленее, светлее) -->
+<g class="wave-layer back" opacity="0.9">
+<path d="M0 200 C 200 120 400 280 800 200 C 1200 120 1400 280 1600 200 L1600 400 L0 400 Z"
+fill="url(#g1)" />
+</g>
+
+
+<!-- Middle wave -->
+<g class="wave-layer mid">
+<path d="M0 220 C 180 160 360 280 800 220 C 1240 160 1420 280 1600 220 L1600 400 L0 400 Z"
+fill="url(#g2)" />
+</g>
+
+
+<!-- Front wave (насыщеннее) -->
+<g class="wave-layer front">
+<path d="M0 240 C 160 200 480 260 800 240 C 1120 220 1440 260 1600 240 L1600 400 L0 400 Z"
+fill="#2e9fff" />
+</g>
+</svg>
