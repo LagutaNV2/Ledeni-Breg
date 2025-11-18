@@ -16,7 +16,8 @@ import dj_database_url
 DEBUG = False
 
 # SECRET_KEY = config('SECRET_KEY')
-SECRET_KEY = os.environ.get('SECRET_KEY', 'fallback-secret-key')  # ИСПОЛЬЗУЙТЕ os.environ
+# SECRET_KEY = os.environ.get('SECRET_KEY', 'fallback-secret-key')  # ИСПОЛЬЗУЙТЕ os.environ
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '.onrender.com,localhost,127.0.0.1').split(',')
@@ -60,3 +61,25 @@ SECURE_BROWSER_XSS_FILTER = True
 
 # WhiteNoise configuration
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Добавьте в конец production.py:
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}

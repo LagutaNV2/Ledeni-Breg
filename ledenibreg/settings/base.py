@@ -6,7 +6,8 @@ from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-dev-key-change-in-production'
+# SECRET_KEY = 'django-insecure-dev-key-change-in-production'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-key-only-for-local')  # Только для разработки
 
 # OpenCage API Key
 OPENCAGE_API_KEY = config('OPENCAGE_API_KEY', default='')
