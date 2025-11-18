@@ -24,4 +24,16 @@ python manage.py migrate
 echo "=== CREATING SUPERUSER (IF NOT EXISTS) ==="
 python create_admin.py
 
+# Check if applications app exists and has models
+echo "=== Checking Applications Setup ==="
+python manage.py shell -c "
+try:
+    from apps.applications.models import Application
+    print('✓ Applications model imported successfully')
+    count = Application.objects.count()
+    print(f'✓ Total applications in DB: {count}')
+except Exception as e:
+    print(f'✗ Applications model error: {e}')
+"
+
 echo "=== Build Complete ==="
