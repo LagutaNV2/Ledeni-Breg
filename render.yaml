@@ -5,8 +5,8 @@ services:
     env: python
     plan: free
     buildCommand: "./build.sh"
-    # startCommand: "gunicorn ledenibreg.wsgi:application --bind 0.0.0.0:$PORT --timeout 120 --workers 2"
-    startCommand: "gunicorn ledenibreg.wsgi:application --bind 0.0.0.0:$PORT --timeout 120 --workers 2 --preload"
+    startCommand: "gunicorn ledenibreg.wsgi:application --bind 0.0.0.0:$PORT --timeout 120 --workers 2"
+    # startCommand: "gunicorn ledenibreg.wsgi:application --bind 0.0.0.0:$PORT --timeout 120 --workers 2 --preload"
     envVars:
       - key: DEBUG
         value: "False"
@@ -15,9 +15,9 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: WEB_CONCURRENCY
-        value: 2
-      - key: PYTHONUNBUFFERED
-        value: "True"
+        value: 4
+      # - key: PYTHONUNBUFFERED
+      #   value: "True"
     # Другие переменные окружения - через панель Render, в т.ч.:
     #        DATABASE_URL,
     #        OPENCAGE_API_KEY и т.д.
