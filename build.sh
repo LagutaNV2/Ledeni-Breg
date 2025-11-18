@@ -7,6 +7,11 @@ echo "Current directory: $(pwd)"
 echo "Directory contents:"
 ls -la
 
+echo "=== CHECKING DJANGO STRUCTURE ==="
+find . -name "manage.py" -type f
+find . -name "wsgi.py" -type f
+echo "=== END CHECK ==="
+
 # Install dependencies
 echo "Installing Python dependencies..."
 pip install -r Django/backend/requirements.txt
