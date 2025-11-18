@@ -1,3 +1,4 @@
+# Django/backend/render.yaml
 services:
   - type: web
     name: ledenibreg
@@ -5,7 +6,6 @@ services:
     plan: free
     buildCommand: "./build.sh"
     startCommand: "gunicorn ledenibreg.wsgi:application --bind 0.0.0.0:$PORT"
-
     envVars:
       - key: DEBUG
         value: "False"
@@ -23,3 +23,7 @@ services:
     name: ledenibreg-db
     plan: free
     ipAllowList: []  # только сервисы Render
+
+databases:
+  - name: ledenibreg-db
+    plan: free
