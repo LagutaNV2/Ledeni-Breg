@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# Exit immediately if any command fails
 set -o errexit
 
 echo "=== Starting Build Process ==="
@@ -10,18 +9,19 @@ ls -la
 echo "=== CHECKING DJANGO STRUCTURE ==="
 find . -name "manage.py" -type f
 find . -name "wsgi.py" -type f
+find . -name "requirements.txt" -type f
 echo "=== END CHECK ==="
 
-# Install dependencies
+# Install dependencies from CORRECT location
 echo "Installing Python dependencies..."
-pip install -r Django/backend/requirements.txt
+pip install -r requirements.txt
 
-# Collect static files (из корневой директории)
+# Collect static files
 echo "Collecting static files..."
-python Django/backend/manage.py collectstatic --noinput
+python manage.py collectstatic --noinput
 
-# Run migrations (из корневой директории)
+# Run migrations
 echo "Running database migrations..."
-python Django/backend/manage.py migrate
+python manage.py migrate
 
 echo "=== Build Complete ==="

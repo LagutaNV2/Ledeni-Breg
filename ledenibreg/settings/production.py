@@ -15,7 +15,6 @@ import dj_database_url
 # DEBUG = config('DEBUG', default=False, cast=bool)
 DEBUG = False
 
-BASE_DIR = Path(__file__).resolve().parent.parent
 # SECRET_KEY = config('SECRET_KEY')
 SECRET_KEY = os.environ.get('SECRET_KEY', 'fallback-secret-key')  # ИСПОЛЬЗУЙТЕ os.environ
 
