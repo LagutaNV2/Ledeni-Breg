@@ -3,13 +3,17 @@ set -o errexit
 
 echo "=== Starting Build Process ==="
 echo "Current directory: $(pwd)"
-echo "Directory contents:"
-ls -la
+# echo "Directory contents:"
+# ls -la
 
-echo "=== CHECKING DJANGO STRUCTURE ==="
-find . -name "manage.py" -type f
-find . -name "wsgi.py" -type f
-find . -name "requirements.txt" -type f
+# echo "=== CHECKING DJANGO STRUCTURE ==="
+# find . -name "manage.py" -type f
+# find . -name "wsgi.py" -type f
+# find . -name "requirements.txt" -type f
+# echo "=== END CHECK ==="
+echo "=== CHECKING TEMPLATES ==="
+find . -name "home.html" -type f
+find . -name "templates" -type d
 echo "=== END CHECK ==="
 
 # Install dependencies from CORRECT location

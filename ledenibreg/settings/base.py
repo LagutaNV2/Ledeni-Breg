@@ -52,7 +52,11 @@ ROOT_URLCONF = 'ledenibreg.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [
+            BASE_DIR / 'templates',           # Для корневых шаблонов
+            BASE_DIR / '../templates',        # Шаблоны на уровень выше
+            BASE_DIR / '../../templates',     # Шаблоны на два уровня выше
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
