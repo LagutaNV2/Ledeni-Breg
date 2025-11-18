@@ -158,15 +158,15 @@ def debug_database(request):
     return JsonResponse(debug_info)
 
 # отладочная функция для тестовой отправки email
-def test_email(request):
+def test_email_view(request):
     try:
         send_mail(
-            'Test Email from Ledeni Breg',
-            'This is a test email from your Django application.',
-            settings.DEFAULT_FROM_EMAIL,
-            [settings.APPLICATION_EMAIL],
+            'Test from Ledeni Breg',
+            'This is a test email.',
+            'n.v.laguta2023@gmail.com',
+            ['n.v.laguta2023@gmail.com'],
             fail_silently=False,
         )
         return JsonResponse({'status': 'Email sent successfully'})
     except Exception as e:
-        return JsonResponse({'status': f'Email failed: {str(e)}'})
+        return JsonResponse({'status': f'Error: {str(e)}'})

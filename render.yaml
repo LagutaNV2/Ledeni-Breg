@@ -5,7 +5,8 @@ services:
     env: python
     plan: free
     buildCommand: "./build.sh"
-    startCommand: "gunicorn ledenibreg.wsgi:application --bind 0.0.0.0:$PORT"
+    # startCommand: "gunicorn ledenibreg.wsgi:application --bind 0.0.0.0:$PORT"
+    startCommand: "gunicorn ledenibreg.wsgi:application --bind 0.0.0.0:$PORT --timeout 120 --workers 2"
     envVars:
       - key: DEBUG
         value: "False"

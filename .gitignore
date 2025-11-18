@@ -6,6 +6,7 @@ doc
 dist/
 doc/
 public/
+_back_/
 
 # Logs
 logs
