@@ -2,7 +2,7 @@
 
 from django.urls import path
 from . import views
-from apps.core.views import debug_database # Импортируем новую отладочную страницу
+from apps.core.views import debug_database, test_email_view # Импортируем отладочные страницу
 
 urlpatterns = [
     path('', views.home, name='home'),

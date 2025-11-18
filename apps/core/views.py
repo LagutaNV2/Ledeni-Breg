@@ -12,7 +12,6 @@ from apps.applications.forms import ApplicationForm
 from apps.applications.models import Application
 
 import os
-from django.core.mail import send_mail
 from django.http import JsonResponse
 
 import logging
@@ -167,6 +166,13 @@ def test_email_view(request):
             ['n.v.laguta2023@gmail.com'],
             fail_silently=False,
         )
+        # send_mail(
+        #     '✅ Test Email from Ledeni Breg',
+        #     'This is a test email from your Django application on Render.',
+        #     settings.DEFAULT_FROM_EMAIL,
+        #     [settings.APPLICATION_EMAIL],
+        #     fail_silently=False,
+        # )
         return JsonResponse({'status': 'Email sent successfully'})
     except Exception as e:
         return JsonResponse({'status': f'Error: {str(e)}'})
