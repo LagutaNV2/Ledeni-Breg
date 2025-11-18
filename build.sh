@@ -11,17 +11,12 @@ ls -la
 echo "Installing Python dependencies..."
 pip install -r Django/backend/requirements.txt
 
-# Change to backend directory
-cd Django/backend
-
-# Collect static files
+# Collect static files (из корневой директории)
 echo "Collecting static files..."
-python manage.py collectstatic --noinput
+python Django/backend/manage.py collectstatic --noinput
 
-# Run migrations
+# Run migrations (из корневой директории)
 echo "Running database migrations..."
-python manage.py migrate
+python Django/backend/manage.py migrate
 
 echo "=== Build Complete ==="
-# Note: The actual deployment to Render.com is
-# handled via the Render dashboard and the render.yaml file.

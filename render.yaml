@@ -6,7 +6,8 @@ services:
     buildCommand: "./build.sh"
     # startCommand: "gunicorn backend.ledenibreg.wsgi:application --chdir backend"
     # startCommand: "cd Django/backend && gunicorn ledenibreg.wsgi:application"
-    startCommand: "cd Django/backend && gunicorn ledenibreg.wsgi:application --bind 0.0.0.0:$PORT"
+    # startCommand: "cd Django/backend && gunicorn ledenibreg.wsgi:application --bind 0.0.0.0:$PORT"
+    startCommand: "gunicorn Django.backend.ledenibreg.wsgi:application --bind 0.0.0.0:$PORT"
 
     envVars:
       - key: DEBUG

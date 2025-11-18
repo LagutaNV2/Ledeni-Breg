@@ -1,3 +1,42 @@
+# Проект LEDENI BREG
+Сайт информационного характера о компании ___, занимающейся установкой автоматов по продаже питьевой воды (водоматы) и игровых автоматов с игрушками (хватайки).
+Регион - Сербия.
+
+
+# Техническая информация
+
+
+## установка env
+PowerShell:
+ cd backend
+
+ venv/Scripts/activate
+
+# requirements (venv)
+pip freeze > requirements.txt
+pip install -r requirements.txt
+
+# запуск сервера в разработке
+python manage.py runserver
+
+Приложение: http://127.0.0.1:8000/
+Админ: http://127.0.0.1:8000/admin/
+
+## запуск команд
+Добавляем тестовые данные
+python manage.py migrate
+python manage.py seed_points
+
+# сервис поиска в картах
+получение бесплатного API ключа (бесплатно 2500 запросов/день):
+
+Зайдите на https://opencagedata.com/ и арегистрируйтесь (бесплатно)
+
+Получите API ключ: Your geocoding API key is: ххх ххх ххх
+
+Добавте переменную OPENCAGE_API_KEY в .env файл и в настройки Render.
+
+
 # Структура проекта (Backend + Frontend)
 
 Django/
@@ -42,7 +81,7 @@ Django/
 │   │   │   ├── admin.py
 │   │   │   ├── apps.py
 |   |   |    ...
-│   │   ├── news/                    # Новости
+│   │   ├── news/                    # Новости. Не реализовано
 │   │   │   ├── __init__.py
 │   │   │   ├── admin.py
 │   │   │   ├── apps.py
@@ -70,7 +109,8 @@ Django/
 │   │   │   ├── main.js           # Основной JS
 │   │   │   ├── forms.js          # Обработка форм
 │   │   │   ├── burger-menu.js    # Бургер-меню
-│   │   │   ├── map-common.js           # Интерактивные карты   |   ...
+│   │   │   ├── map-common.js           # Интерактивные карты
+|   |   |  ...
 |   |   |
 │   │   │
 │   │   ├── images/
@@ -102,55 +142,20 @@ Django/
 |   |       └── footer.html
 |   |
 │   │   ├── base.html
-│   │   ├── index.html # удалить!!!
+│   │   ├── index.html                  # не используется
 │   │   ├── water_background.html
 │   │   ...
 │   │   └── 404.html
-│   ├── media/                        # Загружаемые файлы
+│   ├── media/                        # Загружаемые файлы, пока пусто
 |   |
 |   ...
-│   ├── requirements/  # пока не использзуется
-│   │   ├── base.txt
-│   │   ├── development.txt
-│   │   └── production.txt
+│   ├── requirements/     # пусто
 │   ├── manage.py
 │   └── .env                         # Переменные окружения (не в git)
-├── frontend/                        # пока не используется
-│   ├── scss/                        # Исходные стили
-│   └── js/                          # Исходные JS файлы
 ├── .gitignore
+├──  build.sh                        # сборщик для Render
+├──  render.yaml                     # сборщик для Render
+├──  requirements.txt
+...
 ├── README.md
-├── render.yaml                      # пока пусто
-└── runtime.txt                      # пока пусто
-
-
-
-# запуск команд
-# Добавляем тестовые данные
-python manage.py migrate
-python manage.py seed_points
-
-# env
-cd backend
-PowerShell: venv/Scripts/activate
-
-# requirements (venv)
-pip freeze > requirements.txt
-pip install -r requirements.txt
-
-# запуск сервера в разработке
-python manage.py runserver
-
-http://127.0.0.1:8000/
-Админ: http://127.0.0.1:8000/admin/
-
-
-# сервис поиска в картах
-получить бесплатный API ключ на https://opencagedata.com/
-
-Зайдите на https://opencagedata.com/ и арегистрируйтесь (бесплатно)
-
-Получите API ключ (бесплатно 2500 запросов/день)
-Your geocoding API key is: ххх ххх ххх
-
-Добавте переменную OPENCAGE_API_KEY в .env файл и в настройки Render.
+└── runtime.txt                      # не используется
