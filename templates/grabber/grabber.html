@@ -4,7 +4,9 @@
 {% block title %}Играчки - Ledeni Breg{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+{% comment %} <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" /> {% endcomment %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
 <link rel="stylesheet" href="{% static 'css/map.css' %}">
 <link rel="stylesheet" href="{% static 'css/grabber.css' %}">
 {% endblock %}
@@ -68,7 +70,8 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+{% comment %} <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script> {% endcomment %}
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script src="{% static 'js/map-common.js' %}"></script>
 <script src="{% static 'js/grabber-map.js' %}"></script>
 <script>

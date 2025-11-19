@@ -15,6 +15,7 @@ PowerShell:
 
 # requirements (venv)
 pip freeze > requirements.txt
+
 pip install -r requirements.txt
 
 # запуск сервера в разработке

@@ -12,7 +12,6 @@ import dj_database_url
 # load_dotenv()
 
 
-# DEBUG = config('DEBUG', default=False, cast=bool)
 DEBUG = False
 
 # SECRET_KEY = config('SECRET_KEY')
@@ -71,7 +70,21 @@ SECURE_BROWSER_XSS_FILTER = True
 # WhiteNoise configuration
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Добавьте в конец production.py:
+# Улучшенные настройки сжатия
+COMPRESS_ENABLED = True
+COMPRESS_OFFLINE = True
+
+# Увеличить таймауты
+GUNICORN_TIMEOUT = 120
+
+# Кэширование в памяти
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
+
+# Логирование
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
