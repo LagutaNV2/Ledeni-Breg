@@ -3,9 +3,11 @@
 function initGrabberMap(points) {
     console.log('Initializing grabber map with points:', points);
 
+    let map;
+
     try {
         // Инициализация базовой карты
-        const map = initBaseMap('grabber-map', [43.5, 19.5], 7);
+        map = initBaseMap('grabber-map', [43.5, 19.5], 7);
         if (!map) return;
 
         // Сохраняем ссылку на карту для доступа извне
@@ -34,7 +36,16 @@ function initGrabberMap(points) {
                 }).addTo(markerLayer);
 
                 const popupContent = createPopupContent(point);
-                marker.bindPopup(popupContent);
+                marker.bindPopup(popupContent, {
+                    className: 'custom-popup',
+                    maxWidth: 300,
+                    minWidth: 200
+                });
+
+                // Обработчик клика для открытия попапа
+                marker.on('click', function() {
+                    this.openPopup();
+                });
 
                 markers.push({
                     marker: marker,
@@ -49,13 +60,18 @@ function initGrabberMap(points) {
             map.fitBounds(group.getBounds().pad(0.1));
 
             // Открываем первый попап
-            setTimeout(() => markers[0].marker.openPopup(), 500);
+            // setTimeout(() => {
+            //     if (markers[0] && markers[0].marker) {
+            //         markers[0].marker.openPopup();
+            //     }
+            // }, 500);
         } else {
             showDemoPoints(map, grabberIcon);
         }
 
+        const mapElement = document.getElementById('grabber-map');
         // Добавляем элементы управления
-        addMapControls(map, markers, document.getElementById('grabber-map'), {
+        addMapControls(map, markers, mapElement, {
             pointsListTitle: 'Список автоматов с игрушками'
         });
 
@@ -63,6 +79,18 @@ function initGrabberMap(points) {
         setupMobileBehavior(map);
 
         console.log('✅ Grabber map initialized successfully with', markers.length, 'points');
+
+        setTimeout(() => {
+            if (map) {
+                map.invalidateSize(true);
+                // Принудительно открываем первый попап для тестирования
+                // if (markers.length > 0) {
+                //     setTimeout(() => {
+                //         markers[0].marker.openPopup();
+                //     }, 1000);
+                // }
+            }
+        }, 500);
 
     } catch (error) {
         console.error('Error initializing grabber map:', error);

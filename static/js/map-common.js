@@ -91,7 +91,7 @@ function showErrorMessage(mapElement, error) {
 function createSearchControl(map) {
     const SearchControl = L.Control.extend({
         onAdd: function(map) {
-            const searchContainer = L.DomUtil.create('div', 'search-control');
+            const searchContainer = L.DomUtil.create('div', 'search-control  mobile-optimized');
 
             const searchInput = L.DomUtil.create('input', 'search-input', searchContainer);
             searchInput.type = 'text';
@@ -154,7 +154,7 @@ function createSearchControl(map) {
             const apiKey = '49ccc4bbc07e45788dc79eb85de14eb5';
             const openCageUrl = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(query)}&key=${apiKey}&limit=1&language=sr&countrycode=rs`;
 
-            // Добавляем индикацию загрузки
+            // Индикация загрузки
             const searchContainer = document.querySelector('.search-control');
             const searchButton = searchContainer?.querySelector('.search-button');
             if (searchContainer && searchButton) {
@@ -225,7 +225,7 @@ function createFullscreenControl(mapElement) {
     const FullscreenControl = L.Control.extend({
         onAdd: function(map) {
             const fullscreenButton = L.DomUtil.create('button', 'fullscreen-control');
-            fullscreenButton.innerHTML = '⛶';
+            fullscreenButton.textContent = '⛶';
             fullscreenButton.title = 'Полноэкранный режим';
 
             L.DomEvent.disableClickPropagation(fullscreenButton);
@@ -260,12 +260,45 @@ function createFullscreenControl(mapElement) {
     return new FullscreenControl({ position: 'topright' });
 }
 
-// КРИТИЧЕСКИ ВАЖНО: Создание контрола списка точек с правильной обработкой событий
+// Функция для создания маркеров с попапами NEW
+function createMarkersWithPopups(points, map, customIcon) {
+    const markers = [];
+
+    points.forEach(point => {
+        if (!point.lat || !point.lng) return;
+
+        const marker = L.marker([point.lat, point.lng], {
+            icon: customIcon
+        }).addTo(map);
+
+        // ВАЖНО: Создаем и привязываем попап
+        const popupContent = createPopupContent(point);
+        marker.bindPopup(popupContent);
+
+        // Обработчик клика для открытия попапа
+        marker.on('click', function() {
+            this.openPopup();
+        });
+
+        markers.push({
+            marker: marker,
+            data: point
+        });
+    });
+
+    return markers;
+}
+
+// Создание контрола списка точек с правильной обработкой событий
 function createPointsControl(markers, map, title) {
+    let mapContainer; // Сохраняем ссылку на контейнер карты
+
     const PointsControl = L.Control.extend({
         onAdd: function(map) {
+            mapContainer = map.getContainer(); // Сохраняем контейнер
+
             const pointsButton = L.DomUtil.create('button', 'points-control');
-            pointsButton.innerHTML = '📋';
+            pointsButton.textContent = '📋';
             pointsButton.title = title || 'Список точек';
 
             L.DomEvent.disableClickPropagation(pointsButton);
@@ -276,23 +309,32 @@ function createPointsControl(markers, map, title) {
             return pointsButton;
         },
 
+        // toggleSidePanel: function(markers, map, title) {
+        //     const mapContainer = map.getContainer();
+        //     let sidePanel = mapContainer.querySelector('.map-side-panel');
+
+        //     if (sidePanel) {
+        //         sidePanel.remove();
+        //         mapContainer.classList.remove('map-with-side-panel');
+        //     } else {
+        //         this.createSidePanel(markers, map, title, mapContainer);
+        //     }
+
+        //     setTimeout(() => {
+        //         map.invalidateSize();
+        //     }, 100);
+        // },
         toggleSidePanel: function(markers, map, title) {
-            const mapContainer = map.getContainer();
             let sidePanel = mapContainer.querySelector('.map-side-panel');
 
             if (sidePanel) {
-                sidePanel.remove();
-                mapContainer.classList.remove('map-with-side-panel');
+                this.closeSidePanel();
             } else {
-                this.createSidePanel(markers, map, title, mapContainer);
+                this.createSidePanel(markers, map, title);
             }
-
-            setTimeout(() => {
-                map.invalidateSize();
-            }, 100);
         },
 
-        createSidePanel: function(markers, map, title, mapContainer) {
+        createSidePanel: function(markers, map, title) {
             const sidePanel = document.createElement('div');
             sidePanel.className = 'map-side-panel';
 
@@ -308,16 +350,19 @@ function createPointsControl(markers, map, title) {
             closeButton.className = 'side-panel-close';
             closeButton.innerHTML = '×';
             closeButton.title = 'Закрыть';
+            // closeButton.addEventListener('click', () => {
+            //     sidePanel.remove();
+            //     mapContainer.classList.remove('map-with-side-panel');
+            //     map.invalidateSize();
+            // });
             closeButton.addEventListener('click', () => {
-                sidePanel.remove();
-                mapContainer.classList.remove('map-with-side-panel');
-                map.invalidateSize();
+                this.closeSidePanel();
             });
             header.appendChild(closeButton);
 
             sidePanel.appendChild(header);
 
-            // Список точек - КРИТИЧЕСКИ ВАЖНЫЕ ИЗМЕНЕНИЯ
+            // Список точек с сохранением прокрутки
             const list = document.createElement('div');
             list.className = 'side-panel-list';
 
@@ -354,7 +399,7 @@ function createPointsControl(markers, map, title) {
                 list.appendChild(emptyMessage);
             } else {
                 markers.forEach(item => {
-                    const pointElement = this.createPointElement(item, map, sidePanel);
+                    const pointElement = this.createPointElement(item, map);
                     list.appendChild(pointElement);
                 });
             }
@@ -367,10 +412,11 @@ function createPointsControl(markers, map, title) {
             setTimeout(() => {
                 sidePanel.classList.add('active');
                 list.focus();
+                map.invalidateSize();
             }, 10);
         },
 
-        createPointElement: function(item, map, sidePanel) {
+        createPointElement: function(item, map) {
             const pointElement = document.createElement('div');
             pointElement.className = 'side-panel-item';
 
@@ -390,15 +436,28 @@ function createPointsControl(markers, map, title) {
 
             pointElement.addEventListener('click', (e) => {
                 e.stopPropagation();
-                map.setView([item.data.lat, item.data.lng], 15);
+                map.setView([item.data.lat, item.data.lng], 16);
                 item.marker.openPopup();
-                this.highlightSelectedPoint(pointElement, sidePanel);
+
+                // this.highlightSelectedPoint(pointElement, sidePanel);
+                // Автоматическое закрытие панели на мобильных
+                if (isMobileDevice()) {
+                    setTimeout(() => {
+                        this.closeSidePanel();
+                    }, 500);
+                } else {
+                    // На десктопе только подсвечиваем выбранную точку
+                    this.highlightSelectedPoint(pointElement);
+                }
             });
 
             return pointElement;
         },
 
-        highlightSelectedPoint: function(selectedElement, sidePanel) {
+        highlightSelectedPoint: function(selectedElement) {
+            const sidePanel = mapContainer.querySelector('.map-side-panel');
+            if (!sidePanel) return;
+
             const allPoints = sidePanel.querySelectorAll('.side-panel-item');
             allPoints.forEach(point => {
                 point.classList.remove('selected');
@@ -409,6 +468,18 @@ function createPointsControl(markers, map, title) {
                 behavior: 'smooth',
                 block: 'nearest'
             });
+        },
+
+        closeSidePanel: function() {
+            const sidePanel = mapContainer.querySelector('.map-side-panel');
+            if (sidePanel) {
+                sidePanel.remove();
+                mapContainer.classList.remove('map-with-side-panel');
+                // Используем существующий zoomControl карты
+                if (mapContainer._leaflet_map) {
+                    mapContainer._leaflet_map.invalidateSize();
+                }
+            }
         }
     });
 
@@ -424,25 +495,120 @@ function addMapControls(map, markers, mapElement, options = {}) {
         pointsListTitle = 'Список точек'
     } = options;
 
+    // Добавляем поиск
     if (searchEnabled) {
         const searchControl = createSearchControl(map);
         searchControl.addTo(map);
+
+        // ГАРАНТИРУЕМ видимость на мобильных
+        if (isMobileDevice()) {
+            const searchContainer = mapElement.querySelector('.search-control');
+            if (searchContainer) {
+                searchContainer.style.display = 'flex';
+                searchContainer.style.visibility = 'visible';
+                searchContainer.style.opacity = '1';
+            }
+        }
     }
 
+    // Полноэкранный режим с умным определением устройства
     if (fullscreenEnabled) {
         const fullscreenControl = createFullscreenControl(mapElement);
         fullscreenControl.addTo(map);
+
+        // Скрываем на мобильных через CSS
+        if (isMobileDevice()) {
+            const fullscreenBtn = mapElement.querySelector('.fullscreen-control');
+            if (fullscreenBtn) {
+                fullscreenBtn.classList.add('mobile-hidden');
+            }
+        }
     }
 
+   // Список точек
     if (pointsListEnabled && markers.length > 0) {
         const pointsControl = createPointsControl(markers, map, pointsListTitle);
         pointsControl.addTo(map);
+
+        // ГАРАНТИРУЕМ видимость на мобильных
+        if (isMobileDevice()) {
+            const pointsBtn = mapElement.querySelector('.points-control');
+            if (pointsBtn) {
+                pointsBtn.style.display = 'block';
+                pointsBtn.style.visibility = 'visible';
+                pointsBtn.style.opacity = '1';
+            }
+        }
     }
 
-    L.control.zoom({ position: 'topright' }).addTo(map);
+    // Кастомный zoom контрол
+    const customZoomControl = createCustomZoomControl(map);
+    customZoomControl.addTo(map);
 
-    // Настройка поведения боковой панели
+     // ГАРАНТИРУЕМ видимость на мобильных
+    if (isMobileDevice()) {
+        const zoomControl = mapElement.querySelector('.custom-zoom-control');
+        if (zoomControl) {
+            zoomControl.style.display = 'block';
+            zoomControl.style.visibility = 'visible';
+            zoomControl.style.opacity = '1';
+        }
+    }
+
+    // Настройка поведения
     setupSidePanelBehavior(map);
+    setupMobileBehavior(map);
+
+    // Финальная проверка размера с задержкой
+    setTimeout(() => {
+        if (map && typeof map.invalidateSize === 'function') {
+            map.invalidateSize(true);
+        }
+    }, 500);
+}
+
+// Создание кастомного zoom контрола (альтернативный вариант)
+function createCustomZoomControl(map) {
+    const ZoomControl = L.Control.extend({
+        onAdd: function(map) {
+            const zoomContainer = L.DomUtil.create('div', 'custom-zoom-control');
+
+            const zoomIn = L.DomUtil.create('button', 'zoom-btn zoom-in', zoomContainer);
+            zoomIn.textContent = '+';
+            zoomIn.title = 'Увеличить';
+
+            const zoomOut = L.DomUtil.create('button', 'zoom-btn zoom-out', zoomContainer);
+            zoomOut.textContent = '−';
+            zoomOut.title = 'Уменьшить';
+
+            L.DomEvent.disableClickPropagation(zoomContainer);
+
+            zoomIn.addEventListener('click', () => {
+                map.zoomIn();
+            });
+
+            zoomOut.addEventListener('click', () => {
+                map.zoomOut();
+            });
+
+            return zoomContainer;
+        }
+    });
+
+    return new ZoomControl({ position: 'topright' });
+}
+
+// Определение мобильного устройства NEW
+function isMobileDevice() {
+    const userAgent = navigator.userAgent.toLowerCase();
+    const isTouchDevice = ('ontouchstart' in window) ||
+                         (navigator.maxTouchPoints > 0) ||
+                         (navigator.msMaxTouchPoints > 0);
+
+    const isMobileScreen = window.innerWidth <= 768;
+    const isMobileUserAgent = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+
+    return (isTouchDevice && isMobileScreen) || isMobileUserAgent;
 }
 
 // Настройка поведения боковой панели
@@ -510,69 +676,75 @@ function initBaseMap(mapElementId, center, zoom) {
         mapElement._leaflet_map.remove();
     }
 
-    const map = L.map(mapElementId).setView(center, zoom);
+    // Очищаем контейнер карты
+    while (mapElement.firstChild) {
+        mapElement.removeChild(mapElement.firstChild);
+    }
 
-    // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    //     attribution: '© OpenStreetMap contributors',
-    //     maxZoom: 18,
-    //     minZoom: 6
-    // }).addTo(map);
+    // Создаем карту с правильными настройками
+    const map = L.map(mapElementId, {
+        zoomControl: false, // Отключаем стандартный zoom контрол
+        attributionControl: true,
+        preferCanvas: true // Улучшает производительность на мобильных
+    }).setView(center, zoom);
 
     // Основной провайдер тайлов
     const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors',
         maxZoom: 18,
-        minZoom: 6
+        minZoom: 6,
+        crossOrigin: true
     }).addTo(map);
 
-    // Резервный провайдер на случай проблем с основным
-    const cartoLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+    // Резервный провайдер
+    const cartoLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution: '© OpenStreetMap, © CartoDB',
         maxZoom: 18,
-        minZoom: 6
+        minZoom: 6,
+        crossOrigin: true
+    });
+
+    // Альтернативный резервный провайдер
+    const stadiaLayer = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
+        attribution: '© Stadia Maps, © OpenStreetMap contributors',
+        maxZoom: 18,
+        minZoom: 6,
+        crossOrigin: true
     });
 
     // Обработка ошибок загрузки тайлов
+    let currentLayer = osmLayer;
+    let errorCount = 0;
+
+    function switchToBackupLayer() {
+        errorCount++;
+        if (errorCount === 1) {
+            console.warn('OSM tiles failed, switching to CartoDB...');
+            map.removeLayer(currentLayer);
+            currentLayer = cartoLayer;
+            currentLayer.addTo(map);
+        } else if (errorCount === 2) {
+            console.warn('CartoDB tiles failed, switching to Stadia...');
+            map.removeLayer(currentLayer);
+            currentLayer = stadiaLayer;
+            currentLayer.addTo(map);
+        }
+    }
+
     osmLayer.on('tileerror', function(e) {
-        console.warn('OSM tiles failed, switching to backup...');
-        map.removeLayer(osmLayer);
-        cartoLayer.addTo(map);
+        console.warn('OSM tile error:', e);
+        switchToBackupLayer();
     });
+
+    cartoLayer.on('tileerror', function(e) {
+        console.warn('CartoDB tile error:', e);
+        switchToBackupLayer();
+    });
+
+    // Принудительная проверка размера карты
+    setTimeout(() => {
+        map.invalidateSize();
+    }, 100);
 
     return map;
 }
-
-// Функция для отладки - УДАЛИТЬ ПОСЛЕ ТЕСТИРОВАНИЯ
-// function debugScrollTest() {
-//     console.log('=== DEBUG SCROLL TEST ===');
-//     const sidePanel = document.querySelector('.map-side-panel');
-//     if (sidePanel) {
-//         const list = sidePanel.querySelector('.side-panel-list');
-//         console.log('Side panel found:', !!sidePanel);
-//         console.log('List found:', !!list);
-//         console.log('List scrollHeight:', list?.scrollHeight);
-//         console.log('List clientHeight:', list?.clientHeight);
-//         console.log('Can scroll:', list?.scrollHeight > list?.clientHeight);
-
-//         // Добавляем тестовые точки для проверки прокрутки
-//         if (list && list.children.length < 5) {
-//             for (let i = 0; i < 20; i++) {
-//                 const testItem = document.createElement('div');
-//                 testItem.className = 'side-panel-item';
-//                 testItem.innerHTML = `
-//                     <div class="point-name">Тестовая точка ${i + 1}</div>
-//                     <div class="point-address">Тестовый адрес ${i + 1}</div>
-//                 `;
-//                 list.appendChild(testItem);
-//             }
-//             console.log('Added test items for scrolling');
-//         }
-//     } else {
-//         console.log('Side panel not found');
-//     }
-// }
-
-// Автоматический вызов отладки при загрузке - УДАЛИТЬ ПОСЛЕ ТЕСТИРОВАНИЯ
-// document.addEventListener('DOMContentLoaded', function() {
-//     setTimeout(debugScrollTest, 2000);
-// });

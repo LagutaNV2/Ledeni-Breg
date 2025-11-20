@@ -3,9 +3,11 @@
 function initWaterMap(points) {
     console.log('Initializing water map with points:', points);
 
+    let map;
+
     try {
         // Инициализация базовой карты
-        const map = initBaseMap('water-map', [43.5, 19.5], 7);
+        map = initBaseMap('water-map', [43.5, 19.5], 7);
         if (!map) return;
 
         // Сохраняем ссылку на карту для доступа извне
@@ -34,7 +36,16 @@ function initWaterMap(points) {
                 }).addTo(markerLayer);
 
                 const popupContent = createPopupContent(point);
-                marker.bindPopup(popupContent);
+                marker.bindPopup(popupContent, {
+                    className: 'custom-popup',
+                    maxWidth: 300,
+                    minWidth: 200
+                });
+
+                // Обработчик клика для открытия попапа
+                marker.on('click', function() {
+                    this.openPopup();
+                });
 
                 markers.push({
                     marker: marker,
@@ -49,11 +60,11 @@ function initWaterMap(points) {
             map.fitBounds(group.getBounds().pad(0.1));
 
             // Открываем первый попап
-            setTimeout(() => {
-                if (markers[0] && markers[0].marker) {
-                    markers[0].marker.openPopup();
-                }
-            }, 500);
+            // setTimeout(() => {
+            //     if (markers[0] && markers[0].marker) {
+            //         markers[0].marker.openPopup();
+            //     }
+            // }, 500);
         } else {
             showDemoPoints(map, waterIcon);
         }
@@ -68,6 +79,18 @@ function initWaterMap(points) {
         setupMobileBehavior(map);
 
         console.log('✅ Water map initialized successfully with', markers.length, 'points');
+
+        setTimeout(() => {
+            if (map) {
+                map.invalidateSize(true);
+                // Принудительно открываем первый попап для тестирования
+                // if (markers.length > 0) {
+                //     setTimeout(() => {
+                //         markers[0].marker.openPopup();
+                //     }, 1000);
+                // }
+            }
+        }, 500);
 
     } catch (error) {
         console.error('Error initializing water map:', error);
@@ -108,13 +131,6 @@ function showDemoPoints(map, icon) {
         const marker = L.marker([point.lat, point.lng], { icon: icon })
             .addTo(map)
             .bindPopup(createPopupContent(point));
-
-        // Добавляем демо-пометку
-        // const popupContent = marker.getPopup().getContent();
-        // const demoLabel = document.createElement('p');
-        // demoLabel.className = 'demo-label';
-        // demoLabel.textContent = 'Демо-точка для тестирования';
-        // popupContent.appendChild(demoLabel);
 
     });
 

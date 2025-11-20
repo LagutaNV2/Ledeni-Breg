@@ -30,8 +30,8 @@
                         <li><a href="{% url 'grabber' %}">Igracki</a></li>
                     </ul>
                 </li>
-                <li><a href="#news">Nasi novine</a></li>
-                <li><a href="#press">Media o nama</a></li>
+                {% comment %} <li><a href="#news">Nasi novine</a></li>
+                <li><a href="#press">Media o nama</a></li> {% endcomment %}
                 <li><a href="#contacts">Kontakts</a></li>
             </ul>
         </nav>
@@ -47,7 +47,7 @@
                 <select>
                     <option value="sr">SR</option>
                     <option value="ru">RU</option>
-                    <option value="en">EN</option>
+                    {% comment %} <option value="en">EN</option> {% endcomment %}
                 </select>
             </div>
         </div>

@@ -24,6 +24,14 @@ python manage.py runserver
 Приложение: http://127.0.0.1:8000/
 Админ: http://127.0.0.1:8000/admin/
 
+ctr + shift + delete - очитска кеша в мозиле
+
+
+## GIT
+git add .
+git commit -a -m "update settigs for prodaction"
+git push
+
 ## запуск команд
 Добавляем тестовые данные
 python manage.py migrate

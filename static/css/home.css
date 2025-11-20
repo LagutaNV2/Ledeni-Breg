@@ -68,12 +68,14 @@
 
 .form-link {
     color: #2a5298;
-    text-decoration: none;
+    text-decoration: underline;
     font-weight: 600;
+    font-size: 1.2em;
 }
 
 .form-link:hover {
-    text-decoration: underline;
+    text-decoration: none; /* убираем подчеркивание при наведении */
+    color: #1d3a6d; /* чуть темнее при наведении */
 }
 
 .content-section {
