@@ -123,9 +123,11 @@ e-mail – поле типа e-mail,
 
 # сервис поиска в картах
 получение бесплатного API ключа (бесплатно 2500 запросов/день):
-https://opencagedata.com/ (регситрация бесплатная)
-Получение API ключа: Your geocoding API key is: ххх ххх ххх
-Добавление переменнуой OPENCAGE_API_KEY в .env файл и в настройки Render.
+https://opencagedata.com/ (бесплатная регистрация);
+
+Получение API ключа: Your geocoding API key is: ххх ххх ххх;
+
+Добавление переменной OPENCAGE_API_KEY в .env файл и в настройки Render.
 
 # Техническая информация
 ## Выбор Django вместо чистого JavaScript
@@ -374,5 +376,7 @@ git push
 
 ## запуск команд в разработке
 Добавляем тестовые данные
+
 python manage.py migrate
+
 python manage.py seed_points
