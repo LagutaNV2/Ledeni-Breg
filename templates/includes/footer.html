@@ -16,8 +16,17 @@
             </div>
         </div>
 
-        <div class="footer-info">
+        {% comment %} <div class="footer-info">
             <p>&copy; 2025 Vendime d.o.o. </p>
+        </div> {% endcomment %}
+        <!-- ✅ Атрибуция OpenStreetMap и OpenCage Data -->
+        <div class="footer-attribution">
+            © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> |
+            © <a href="https://opencagedata.com">OpenCage Data</a>
+        </div>
+
+        <div class="footer-copyright">
+            &copy; {{ now|date:"Y" }} 2025 Vendime d.o.o.
         </div>
     </div>
 </footer>
