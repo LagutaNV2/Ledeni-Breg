@@ -89,19 +89,23 @@
 }
 
 .page-title {
-    font-size: 2.2rem;
+    font-size: 2.5rem;
     margin-bottom: 0.75rem;
-    font-weight: 700;
+    font-weight: 800;
     color: #0e0a78;
-    text-shadow: 4px 4px 4px rgba(255,255,255,0.7);
+    text-shadow:
+        4px 4px 8px rgba(255, 255, 255, 0.8),
+        0 0 20px rgba(74, 144, 226, 0.3);
 }
 
 .hero-subtitle {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     opacity: 0.9;
-    font-weight: 300;
+    font-weight: 400;
     color: #2a5298;
-    text-shadow: 3px 3px 4px rgba(255,255,255,0.7);
+    text-shadow:
+        3px 3px 6px rgba(255, 255, 255, 0.8),
+        0 0 15px rgba(74, 144, 226, 0.2);
 }
 
 /* Блок с автоматом и текстом */
@@ -116,14 +120,36 @@
     max-width: 1200px;
     margin: 0 auto;
     background: rgba(255, 255, 255, 0.95);
-    padding: 3rem;
+    padding: 3.5rem;
     border-radius: 20px;
     box-shadow:
-        0 10px 30px rgba(30, 60, 114, 0.15),
-        0 0 0 1px rgba(74, 144, 226, 0.1),
-        0 0 30px rgba(74, 144, 226, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.8);
+        0 15px 40px rgba(30, 60, 114, 0.2),
+        0 8px 25px rgba(30, 60, 114, 0.15),
+        0 0 0 1px rgba(255, 255, 255, 0.9),
+        0 0 40px rgba(74, 144, 226, 0.15);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    transition: all 0.4s ease;
+    position: relative;
+}
+
+.automat-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(30, 60, 114, 0.3), transparent);
+}
+
+.automat-content:hover {
+    transform: translateY(-5px);
+    box-shadow:
+        0 25px 60px rgba(30, 60, 114, 0.3),
+        0 15px 40px rgba(30, 60, 114, 0.2),
+        0 0 60px rgba(74, 144, 226, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
 }
 
 .automat-image {
@@ -137,16 +163,18 @@
     max-height: 350px;
     border-radius: 15px;
     box-shadow:
-        0 15px 35px rgba(0, 0, 0, 0.1),
-        0 0 20px rgba(74, 144, 226, 0.2);
-    transition: all 0.3s ease;
+        0 20px 45px rgba(0, 0, 0, 0.2),
+        0 12px 30px rgba(74, 144, 226, 0.25),
+        0 0 30px rgba(74, 144, 226, 0.15);
+    transition: all 0.4s ease;
 }
 
 .automat-img:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px) scale(1.02);
     box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.15),
-        0 0 25px rgba(74, 144, 226, 0.3);
+        0 30px 60px rgba(0, 0, 0, 0.25),
+        0 20px 45px rgba(74, 144, 226, 0.35),
+        0 0 50px rgba(74, 144, 226, 0.2);
 }
 
 .automat-text {
@@ -236,12 +264,18 @@
     .automat-content {
         flex-direction: column;
         gap: 2rem;
-        padding: 1.5rem;
+        padding: 2.5rem 2rem;
         border-radius: 15px;
+        box-shadow:
+            0 10px 30px rgba(30, 60, 114, 0.15),
+            0 5px 15px rgba(30, 60, 114, 0.1);
     }
 
     .automat-img {
         max-height: 280px;
+        box-shadow:
+            0 30px 60px rgba(0, 0, 0, 0.15),
+            0 10px 40px rgba(74, 144, 226, 0.2);
     }
 
     .automat-text h2 {

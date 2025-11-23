@@ -67,6 +67,13 @@ SECURE_HSTS_SECONDS = 31536000
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
 
+# Для кастомных обработчиков ошибок
+CSRF_TRUSTED_ORIGINS = ['https://ledenibreg.com', 'https://www.ledenibreg.com']
+
+# Добавляем обработчики ошибок
+handler404 = 'apps.core.views.custom_404'
+handler500 = 'apps.core.views.custom_500'
+
 # WhiteNoise configuration
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 

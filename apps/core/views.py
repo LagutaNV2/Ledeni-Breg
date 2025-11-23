@@ -12,7 +12,7 @@ from apps.applications.forms import ApplicationForm
 from apps.applications.models import Application
 
 import os
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseNotFound
 
 import logging
 
@@ -72,8 +72,10 @@ def press(request):
     return render(request, 'core/press.html')
 
 def contacts(request):
-    # не реализовано получение контактной информации из базы данных
-    return render(request, 'contacts/contacts.html')
+    context = {
+        'page_title': 'Kontakti - Ledeni Breg',
+    }
+    return render(request, 'core/contacts.html', context)
 
 def application(request):
     if request.method == 'POST':
@@ -134,6 +136,12 @@ Datum prijave: {application.created_date.strftime('%d.%m.%Y %H:%M')}"""
         # GET запрос - показываем пустую форму
         form = ApplicationForm()
         return render(request, 'applications/application.html', {'form': form})
+
+def custom_404(request, exception):
+    return render(request, 'core/404.html', status=404)
+
+def custom_500(request):
+    return render(request, 'core/500.html', status=500)
 
 # отладочная функция для проверки подключения к базе данных
 def debug_database(request):

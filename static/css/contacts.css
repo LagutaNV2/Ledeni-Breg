@@ -1,0 +1,410 @@
+/* static/css/contacts.css */
+.contacts-section {
+    min-height: calc(100vh - 200px);
+    padding: 3rem 0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.contacts-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 0 1rem;
+}
+
+.contacts-header h1 {
+    color: #1e3c72;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.contacts-header p {
+    color: #666;
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.contacts-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.contact-block {
+    width: 100%;
+}
+
+/* Современный стиль для контактной карточки */
+.modern-card {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow:
+        0 15px 40px rgba(30, 60, 114, 0.1),
+        0 8px 25px rgba(30, 60, 114, 0.05),
+        0 0 0 1px rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    text-align: center;
+}
+
+.modern-card h2 {
+    color: #1e3c72;
+    font-size: 2rem;
+    margin-bottom: 2.5rem;
+    font-weight: 700;
+    position: relative;
+}
+
+.modern-card h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    border-radius: 2px;
+}
+
+/* Сетка контактов в современном стиле */
+.contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 0 auto;
+    max-width: 600px;
+}
+
+.contact-item.modern {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+    border: 1px solid rgba(30, 60, 114, 0.1);
+    transition: all 0.3s ease;
+    text-align: left;
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.05),
+        0 2px 8px rgba(30, 60, 114, 0.03);
+}
+
+.contact-item.modern:hover {
+    transform: translateY(-3px);
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.1),
+        0 4px 15px rgba(30, 60, 114, 0.08);
+    border-color: rgba(30, 60, 114, 0.2);
+}
+
+.contact-icon {
+    font-size: 1.8rem;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    border-radius: 12px;
+    flex-shrink: 0;
+}
+
+.contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.contact-details .label {
+    font-weight: 600;
+    color: #1e3c72;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.contact-details .value {
+    color: #333;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.contact-details a.value {
+    color: #2a5298;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.contact-details a.value:hover {
+    color: #1e3c72;
+}
+
+/* Быстрые действия */
+.quick-actions {
+    text-align: center;
+}
+
+.quick-actions h2 {
+    color: #1e3c72;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    font-weight: 600;
+}
+
+/* Новая компоновка кнопок для десктопа и ландшафта */
+.action-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Стили кнопок как на главной странице */
+.btn {
+    padding: 1.2rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    text-decoration: none;
+    text-align: center;
+    font-size: 0.95rem;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow:
+        0 6px 20px rgba(0, 0, 0, 0.25),
+        0 8px 30px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+.btn:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, 0.35),
+        0 15px 45px rgba(0, 0, 0, 0.25),
+        0 0 30px rgba(255, 255, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn:active {
+    transform: translateY(-1px) scale(1.01);
+    transition: all 0.1s ease;
+}
+
+/* Конкретные стили кнопок */
+.btn-viber {
+    background: linear-gradient(135deg, #907ef5 0%, #433982 100%);
+    color: white;
+    box-shadow:
+        0 6px 20px rgba(144, 126, 245, 0.3),
+        0 8px 30px rgba(67, 57, 130, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.btn-viber:hover {
+    box-shadow:
+        0 12px 35px rgba(144, 126, 245, 0.5),
+        0 15px 45px rgba(67, 57, 130, 0.3),
+        0 0 40px rgba(144, 126, 245, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* Фикс для кнопки Viber - убираем мелькание */
+.btn-viber::before {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+}
+
+.btn-call {
+    background: linear-gradient(135deg, #106665 0%, #011c14 100%);
+    color: white;
+    box-shadow:
+        0 6px 20px rgba(16, 102, 101, 0.3),
+        0 8px 30px rgba(1, 28, 20, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.btn-call:hover {
+    box-shadow:
+        0 12px 35px rgba(16, 102, 101, 0.5),
+        0 15px 45px rgba(1, 28, 20, 0.3),
+        0 0 40px rgba(16, 102, 101, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.btn-water {
+    background: linear-gradient(135deg, #0099ff 0%, #005f99 100%);
+    color: white;
+    box-shadow:
+        0 6px 20px rgba(0, 153, 255, 0.3),
+        0 8px 30px rgba(0, 95, 153, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.btn-water:hover {
+    box-shadow:
+        0 12px 35px rgba(0, 153, 255, 0.5),
+        0 15px 45px rgba(0, 95, 153, 0.3),
+        0 0 40px rgba(0, 153, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.btn-icon {
+    font-size: 1.3rem;
+}
+
+/* Адаптивность для планшетов */
+@media (max-width: 1024px) {
+    .action-buttons {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.2rem;
+        max-width: 800px;
+    }
+
+    .btn {
+        padding: 1.1rem 1.3rem;
+        font-size: 0.9rem;
+        min-height: 55px;
+    }
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .contacts-section {
+        padding: 2rem 0;
+    }
+
+    .contacts-header h1 {
+        font-size: 2rem;
+    }
+
+    .contacts-header p {
+        font-size: 1.1rem;
+    }
+
+    .modern-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .modern-card h2 {
+        font-size: 1.7rem;
+    }
+
+    .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .contact-item.modern {
+        padding: 1.2rem;
+    }
+
+    /* Для мобильных - кнопки в одну колонку */
+    .action-buttons {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        max-width: 400px;
+    }
+
+    .btn {
+        padding: 1.1rem 1.3rem;
+        min-height: 55px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Ландшафтная ориентация для мобильных */
+@media (max-width: 768px) and (orientation: landscape) {
+    .action-buttons {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        max-width: 900px;
+    }
+
+    .contacts-section {
+        padding: 1.5rem 0;
+    }
+
+    .modern-card {
+        padding: 1.5rem;
+    }
+}
+
+/* Очень маленькие экраны */
+@media (max-width: 480px) {
+    .contacts-section {
+        padding: 1.5rem 0;
+    }
+
+    .contacts-header h1 {
+        font-size: 1.7rem;
+    }
+
+    .modern-card {
+        padding: 1.5rem 1rem;
+    }
+
+    .contact-item.modern {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.8rem;
+    }
+
+    .contact-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 1.5rem;
+        margin: 0 auto;
+    }
+
+    .contact-details {
+        text-align: center;
+    }
+
+    /* Для очень маленьких экранов возвращаем колоночную верстку */
+    .action-buttons {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Для очень широких экранов */
+@media (min-width: 1400px) {
+    .action-buttons {
+        max-width: 1000px;
+    }
+
+    .btn {
+        padding: 1.3rem 1.8rem;
+        font-size: 1rem;
+    }
+}

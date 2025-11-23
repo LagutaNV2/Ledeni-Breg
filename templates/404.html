@@ -1,0 +1,52 @@
+<!-- templates/core/404.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/error.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="error-section">
+    <div class="container">
+        <div class="error-content">
+            <div class="error-icon">🔍</div>
+            <h1>404 - Stranica nije pronađena</h1>
+            <p class="error-message">
+                Tražena stranica ne postoji ili je privremeno nedostupna.
+            </p>
+
+            <div class="error-actions">
+                <a href="{% url 'home' %}" class="btn btn-primary">
+                    Vratite se na početnu
+                </a>
+                <a href="{% url 'contacts' %}" class="btn btn-secondary">
+                    Kontaktirajte nas
+                </a>
+            </div>
+
+            <div class="quick-links">
+                <h3>Korisni linkovi:</h3>
+                <div class="links-grid">
+                    <a href="{% url 'water' %}" class="link-card">
+                        <span class="link-icon">💧</span>
+                        Vodomati
+                    </a>
+                    <a href="{% url 'grabber' %}" class="link-card">
+                        <span class="link-icon">🎮</span>
+                        Igrački automati
+                    </a>
+                    <a href="{% url 'application' %}" class="link-card">
+                        <span class="link-icon">📝</span>
+                        Prijava za ugradnju
+                    </a>
+                    <a href="{% url 'contacts' %}" class="link-card">
+                        <span class="link-icon">📞</span>
+                        Kontakti
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

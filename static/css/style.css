@@ -45,7 +45,10 @@ main {
     right: 0;
     z-index: 1000;
     width: 100%;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.15),
+        0 8px 40px rgba(30, 60, 114, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
 .header-container {
@@ -300,6 +303,9 @@ main {
     color: #94e7f4;
     padding: 2rem 1rem;
     text-align: center;
+    box-shadow:
+        0 -4px 20px rgba(0, 0, 0, 0.15),
+        0 -8px 40px rgba(30, 60, 114, 0.2);
 }
 
 .footer-content {
@@ -321,15 +327,24 @@ main {
 .social-link {
     color: #94e7f4;
     text-decoration: none;
-    padding: 0.5rem 1rem;
-    border: 1px solid #94e7f4;
-    border-radius: 4px;
-    transition: all 0.3s ease;
+    padding: 0.6rem 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    transition: all 0.4s ease;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .social-link:hover {
     background: #94e7f4;
     color: #1e3c72;
+    transform: translateY(-3px);
+    box-shadow:
+        0 8px 25px rgba(255, 255, 255, 0.3),
+        0 0 20px rgba(255, 255, 255, 0.2);
 }
 
 /* для атрибутов упоминания разработчика карт */
@@ -355,54 +370,132 @@ main {
 .buttons-group {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.5rem;
 }
 
 .btn {
-    padding: 1rem 1.5rem;
+    min-height: 60px;
+    padding: 1.4rem 2rem;
+    align-items: center;
+    justify-content: center;
     border-radius: 8px;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    transition: all 0.3s ease;
+    letter-spacing: 0.8px;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     text-decoration: none;
     text-align: center;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    box-shadow:
+        0 6px 20px rgba(0, 0, 0, 0.25),
+        0 8px 30px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
 }
 
 .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+     transform: translateY(-4px) scale(1.02);
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, 0.35),
+        0 15px 45px rgba(0, 0, 0, 0.25),
+        0 0 30px rgba(255, 255, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn:active {
+    transform: translateY(-1px) scale(1.01);
+    transition: all 0.1s ease;
 }
 
 .btn-water {
     background: linear-gradient(135deg, #0099ff 0%, #005f99 100%);
     color: white;
+    box-shadow:
+        0 6px 20px rgba(0, 153, 255, 0.3),
+        0 8px 30px rgba(0, 95, 153, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.btn-water:hover {
+    box-shadow:
+        0 12px 35px rgba(0, 153, 255, 0.5),
+        0 15px 45px rgba(0, 95, 153, 0.3),
+        0 0 40px rgba(0, 153, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .btn-grabber {
     background: linear-gradient(135deg, #f472d3 0%, #c30379 100%);
     color: white;
+    box-shadow:
+        0 6px 20px rgba(244, 114, 211, 0.3),
+        0 8px 30px rgba(195, 3, 121, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.btn-grabber:hover {
+    box-shadow:
+        0 12px 35px rgba(244, 114, 211, 0.5),
+        0 15px 45px rgba(195, 3, 121, 0.3),
+        0 0 40px rgba(244, 114, 211, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .btn-viber {
     background: linear-gradient(135deg, #907ef5 0%, #433982 100%);
     color: white;
+    box-shadow:
+        0 6px 20px rgba(144, 126, 245, 0.3),
+        0 8px 30px rgba(67, 57, 130, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.btn-viber:hover {
+    box-shadow:
+        0 12px 35px rgba(144, 126, 245, 0.5),
+        0 15px 45px rgba(67, 57, 130, 0.3),
+        0 0 40px rgba(144, 126, 245, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .btn-call {
     background: linear-gradient(135deg, #106665 0%, #011c14 100%);
     color: white;
+    box-shadow:
+        0 6px 20px rgba(16, 102, 101, 0.3),
+        0 8px 30px rgba(1, 28, 20, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.btn-call:hover {
+    box-shadow:
+        0 12px 35px rgba(16, 102, 101, 0.5),
+        0 15px 45px rgba(1, 28, 20, 0.3),
+        0 0 40px rgba(16, 102, 101, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 /* Анимации */
 @keyframes fadeInDown {
     from {
         opacity: 0;
-        transform: translateY(-10px);
+        transform: translateY(-20px);
     }
     to {
         opacity: 1;
@@ -421,6 +514,24 @@ main {
         left: 1.2rem;
         right: 1.2rem;
     }
+}
+
+@keyframes glowPulse {
+    0%, 100% {
+        box-shadow:
+            0 6px 20px rgba(0, 0, 0, 0.25),
+            0 8px 30px rgba(0, 0, 0, 0.15);
+    }
+    50% {
+        box-shadow:
+            0 8px 25px rgba(0, 0, 0, 0.3),
+            0 12px 40px rgba(0, 0, 0, 0.2);
+    }
+}
+
+/* Анимация пульсации для привлечения внимания */
+.btn-pulse {
+    animation: glowPulse 2s ease-in-out infinite;
 }
 
 /* Улучшение доступности */
@@ -702,8 +813,22 @@ main {
     .btn {
         flex: 1;
         min-width: 140px;
-        font-size: 0.8rem;
-        padding: 0.8rem 1rem;
+        padding: 1.4rem 2rem;
+        font-size: 0.9rem;
+        box-shadow:
+            0 4px 25px rgba(0, 0, 0, 0.2),
+            0 6px 35px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn:hover {
+        transform: translateY(-2px) scale(1.01);
+        box-shadow:
+            0 8px 30px rgba(0, 0, 0, 0.3),
+            0 10px 35px rgba(0, 0, 0, 0.2);
+    }
+
+    .social-link {
+        padding: 0.5rem 1rem;
     }
 }
 

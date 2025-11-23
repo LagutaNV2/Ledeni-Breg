@@ -1,0 +1,81 @@
+<!-- templates/core/contacts.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/contacts.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="contacts-section">
+    <div class="container">
+        <div class="contacts-header">
+            <h1>Kontaktirajte nas</h1>
+            <p>Stojimo vam na raspolaganju za sva pitanja i saradnju</p>
+        </div>
+
+        <div class="contacts-content">
+            <!-- Основная контактная информация в современном стиле -->
+            <div class="contact-block main-info">
+                <div class="contact-card modern-card">
+                    <h2>Iceberg Vendtime d.o.o</h2>
+
+                    <div class="contact-grid">
+                        <div class="contact-item modern">
+                            <div class="contact-icon">📍</div>
+                            <div class="contact-details">
+                                <span class="label">Adresa</span>
+                                <span class="value">Srbija, Kragujevac</span>
+                            </div>
+                        </div>
+
+                        <div class="contact-item modern">
+                            <div class="contact-icon">📞</div>
+                            <div class="contact-details">
+                                <span class="label">Telefon</span>
+                                <a href="tel:+381677898477" class="value">067/789-8477</a>
+                            </div>
+                        </div>
+
+                        <div class="contact-item modern">
+                            <div class="contact-icon">✉️</div>
+                            <div class="contact-details">
+                                <span class="label">Email</span>
+                                <a href="mailto:info@ledenibreg.com" class="value">info@ledenibreg.com</a>
+                            </div>
+                        </div>
+
+                        <div class="contact-item modern">
+                            <div class="contact-icon">🕒</div>
+                            <div class="contact-details">
+                                <span class="label">Radno vreme</span>
+                                <span class="value">Pon - Pet: 08:00 - 16:00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Блок быстрых действий -->
+            <div class="contact-block quick-actions">
+                <h2>Brzi kontakti</h2>
+                <div class="action-buttons">
+                    <a href="viber://chat?number=+381677898477" class="btn btn-viber">
+                        <span class="btn-icon">💬</span>
+                        Viber Chat
+                    </a>
+                    <a href="tel:+381677898477" class="btn btn-call">
+                        <span class="btn-icon">📞</span>
+                        Pozovite nas
+                    </a>
+                    <a href="{% url 'application' %}" class="btn btn-water">
+                        <span class="btn-icon">📝</span>
+                        Popunite prijavu
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

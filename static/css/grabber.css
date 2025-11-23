@@ -92,18 +92,31 @@
 /* Подложка для заголовка */
 .title-backdrop {
     background: rgba(255, 255, 255, 0.01);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border-radius: 20px;
-    padding: 2rem 3rem;
+    padding: 2.5rem 3.5rem;
     display: inline-block;
     box-shadow:
-        0 8px 32px rgba(211, 47, 47, 0.15),
-        0 2px 8px rgba(211, 47, 47, 0.1);
-    /* border: 1px solid rgba(255, 255, 255, 0.3); */
+        0 15px 40px rgba(211, 47, 47, 0.25),
+        0 8px 25px rgba(211, 47, 47, 0.15),
+        0 0 40px rgba(211, 47, 47, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4),
+        inset 0 0 20px rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.4);
     text-align: center;
     margin: 1rem auto;
     max-width: 90%;
+    transition: all 0.4s ease;
+}
+
+.title-backdrop:hover {
+    box-shadow:
+        0 20px 50px rgba(211, 47, 47, 0.35),
+        0 12px 35px rgba(211, 47, 47, 0.25),
+        0 0 60px rgba(211, 47, 47, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    transform: translateY(-3px);
 }
 
 /* Прозрачность для контентных блоков */
@@ -159,13 +172,35 @@
     gap: 4rem;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 3rem;
+    padding: 3.5rem;
     border-radius: 20px;
     box-shadow:
-        0 10px 30px rgba(211, 47, 47, 0.15),
-        0 0 0 1px rgba(211, 47, 47, 0.1),
-        0 0 30px rgba(211, 47, 47, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.8);
+        0 15px 40px rgba(211, 47, 47, 0.2),
+        0 8px 25px rgba(211, 47, 47, 0.15),
+        0 0 0 1px rgba(255, 255, 255, 0.8),
+        0 0 40px rgba(211, 47, 47, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    transition: all 0.4s ease;
+    position: relative;
+}
+
+.automat-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(211, 47, 47, 0.3), transparent);
+}
+
+.automat-content:hover {
+    transform: translateY(-5px);
+    box-shadow:
+        0 25px 60px rgba(211, 47, 47, 0.3),
+        0 15px 40px rgba(211, 47, 47, 0.2),
+        0 0 60px rgba(211, 47, 47, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 .automat-image {
@@ -179,16 +214,18 @@
     max-height: 350px;
     border-radius: 15px;
     box-shadow:
-        0 15px 35px rgba(0, 0, 0, 0.1),
-        0 0 20px rgba(211, 47, 47, 0.2);
-    transition: all 0.3s ease;
+        0 20px 45px rgba(0, 0, 0, 0.2),
+        0 12px 30px rgba(211, 47, 47, 0.25),
+        0 0 30px rgba(211, 47, 47, 0.15);
+    transition: all 0.4s ease;
 }
 
 .automat-img:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px) scale(1.02);
     box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.15),
-        0 0 25px rgba(211, 47, 47, 0.3);
+        0 30px 60px rgba(0, 0, 0, 0.25),
+        0 20px 45px rgba(211, 47, 47, 0.35),
+        0 0 50px rgba(211, 47, 47, 0.2);
 }
 
 .automat-text {
@@ -220,16 +257,29 @@
     display: flex;
     align-items: center;
     margin-bottom: 0.875rem;
-    padding: 0.7rem;
-    background: rgba(211, 47, 47, 0.05);
-    border-radius: 8px;
-    border-left: 4px solid #d32f2f;
+    padding: 0.9rem;
+    background: rgba(211, 47, 47, 0.08);
+    border-radius: 12px;
+    border-left: 5px solid #d32f2f;
+    box-shadow:
+        0 4px 15px rgba(211, 47, 47, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+    background: rgba(211, 47, 47, 0.12);
+    transform: translateX(5px);
+    box-shadow:
+        0 6px 20px rgba(211, 47, 47, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 .feature-icon {
-    font-size: 1.4rem;
-    margin-right: 0.875rem;
-    min-width: 35px;
+    font-size: 1.5rem;
+    margin-right: 1rem;
+    min-width: 40px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 /* Медиа-запросы для адаптивного фона */
@@ -238,6 +288,13 @@
 @media (max-width: 768px) {
     .toys-page {
         background: none; /* Убираем PNG на мобильных */
+    }
+
+    .title-backdrop {
+        padding: 2rem;
+        box-shadow:
+            0 10px 30px rgba(211, 47, 47, 0.2),
+            0 5px 15px rgba(211, 47, 47, 0.15);
     }
 
     .grabber-content-with-bg .igracki-bg-wrap {
@@ -265,12 +322,18 @@
     .automat-content {
         flex-direction: column;
         gap: 2rem;
-        padding: 1.5rem;
+        padding: 2rem;
         border-radius: 15px;
+        box-shadow:
+            0 10px 30px rgba(211, 47, 47, 0.15),
+            0 5px 15px rgba(211, 47, 47, 0.1);
     }
 
     .automat-img {
         max-height: 280px;
+        box-shadow:
+            0 15px 30px rgba(0, 0, 0, 0.15),
+            0 8px 20px rgba(211, 47, 47, 0.2);
     }
 
     .automat-text h2 {
