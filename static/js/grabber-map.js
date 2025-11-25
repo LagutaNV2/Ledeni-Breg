@@ -59,12 +59,6 @@ function initGrabberMap(points) {
             const group = L.featureGroup(markers.map(m => m.marker));
             map.fitBounds(group.getBounds().pad(0.1));
 
-            // Открываем первый попап
-            // setTimeout(() => {
-            //     if (markers[0] && markers[0].marker) {
-            //         markers[0].marker.openPopup();
-            //     }
-            // }, 500);
         } else {
             showDemoPoints(map, grabberIcon);
         }
@@ -72,7 +66,7 @@ function initGrabberMap(points) {
         const mapElement = document.getElementById('grabber-map');
         // Добавляем элементы управления
         addMapControls(map, markers, mapElement, {
-            pointsListTitle: 'Список автоматов с игрушками'
+            pointsListTitle: 'Lista automata sa igračkama'
         });
 
         // Адаптация для мобильных устройств
@@ -83,12 +77,6 @@ function initGrabberMap(points) {
         setTimeout(() => {
             if (map) {
                 map.invalidateSize(true);
-                // Принудительно открываем первый попап для тестирования
-                // if (markers.length > 0) {
-                //     setTimeout(() => {
-                //         markers[0].marker.openPopup();
-                //     }, 1000);
-                // }
             }
         }, 500);
 

@@ -20,20 +20,29 @@
         <!-- Основное меню (десктоп) -->
         <nav class="main-nav">
             <ul class="nav-list">
-                <li><a href="{% url 'about' %}">О nama</a></li>
+                <li><a href="{% url 'about' %}">
+                    {% if current_language == 'ru' %}О нас{% else %}O nama{% endif %}
+                </a></li>
                 <li class="dropdown">
                 {% comment %} ! проблема здесь! {% endcomment %}
                     {% comment %} <a href="#services">Vrsta avtomata</a> {% endcomment %}
-                    <a href="javascript:void(0)">Vrsta avtomata</a>
+                    <a href="javascript:void(0)">
+                        {% if current_language == 'ru' %}Тип автомата{% else %}Vrsta automata{% endif %}
+                    </a>
                     <ul class="dropdown-menu">
-                        <li><a href="{% url 'water' %}">Vodomat</a></li>
-                        <li><a href="{% url 'grabber' %}">Igracki</a></li>
+                        <li><a href="{% url 'water' %}">
+                            {% if current_language == 'ru' %}Водомат{% else %}Vodomat{% endif %}
+                        </a></li>
+                        <li><a href="{% url 'grabber' %}">
+                            {% if current_language == 'ru' %}Игрушки{% else %}Igrački{% endif %}
+                        </a></li>
                     </ul>
                 </li>
                 {% comment %} <li><a href="#news">Nasi novine</a></li>
                 <li><a href="#press">Media o nama</a></li> {% endcomment %}
-                {% comment %} <li><a href="#contacts">Kontakts</a></li> {% endcomment %}
-                <li><a href="{% url 'contacts' %}">Kontakti</a></li>
+                <li><a href="{% url 'contacts' %}">
+                    {% if current_language == 'ru' %}Контакты{% else %}Kontakti{% endif %}
+                </a></li>
             </ul>
         </nav>
 
@@ -45,11 +54,20 @@
             </a>
 
             <div class="language-switcher">
-                <select>
+                {% comment %} <select>
                     <option value="sr">SR</option>
                     <option value="ru">RU</option>
-                    {% comment %} <option value="en">EN</option> {% endcomment %}
-                </select>
+                </select> {% endcomment %}
+                <form method="post" action="{% url 'set_language' %}" id="language-form">
+                    {% csrf_token %}
+                    <select name="language">
+                        {% for code, name in languages %}
+                            <option value="{{ code }}" {% if current_language == code %}selected{% endif %}>
+                                {{ name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </form>
             </div>
         </div>
     </div>

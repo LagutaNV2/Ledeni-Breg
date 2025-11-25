@@ -2,7 +2,9 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}О фирме - Ledeni Breg{% endblock %}
+{% block title %}
+    {% if current_language == 'ru' %}О фирме - Ledeni Breg{% else %}O firmi - Ledeni Breg{% endif %}
+{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/about.css' %}">
@@ -11,41 +13,88 @@
 {% block content %}
 <section class="about-page">
     <div class="container">
-        <h1 class="page-title">О фирме</h1>
+        <h1 class="page-title">
+            {% if current_language == 'ru' %}О фирме{% else %}O firmi{% endif %}
+        </h1>
 
         <div class="about-content">
             <div class="about-text">
-                <h2>Компания Ledeni Breg</h2>
-                <p>Мы предоставляем качественные услуги по установке водоматов и игровых автоматов.</p>
-                <p>Наша компания продолжает идею российских партнеров по продаже живой питьевой очищенной воды, без искусственного обогащения и примесей.
-                   Мы первые в Сербии занялись установкой водоматов и предоставлением людям качественной и недорогой воды!</p>
+                <h2>
+                    {% if current_language == 'ru' %}Компания Ledeni Breg{% else %}Kompanija Ledeni Breg{% endif %}
+                </h2>
+                <p>
+                    {% if current_language == 'ru' %}
+                        Мы предоставляем качественные услуги по установке водоматов и игровых автоматов.
+                    {% else %}
+                        Pružamo kvalitetne usluge u postavljanju vodomata i igara automata.
+                    {% endif %}
+                </p>
+                <p>
+                    {% if current_language == 'ru' %}
+                        Наша компания продолжает идею российских партнеров по продаже живой питьевой очищенной воды, без искусственного обогащения и примесей.
+                        Мы первые в Сербии занялись установкой водоматов и предоставлением людям качественной и недорогой воды!
+                    {% else %}
+                        Naša kompanija nastavlja ideju ruskih partnera o prodaji žive čiste vode bez veštačkog obogaćivanja i primesa.
+                        Prvi smo u Srbiji počeli sa postavljanjem vodomata i pružanjem ljudima kvalitetne i jeftine vode!
+                    {% endif %}
+                </p>
 
-                <p>Наши игровые автоматы предлагают уникальные мягкие игрушки по доступной цене.</p>
+                <p>
+                    {% if current_language == 'ru' %}
+                        Наши игровые автоматы предлагают уникальные мягкие игрушки по доступной цене.
+                    {% else %}
+                        Naši automati za igranje nude jedinstvene meke igračke po pristupačnim cenama.
+                    {% endif %}
+                </p>
 
-                <h3>Наша миссия</h3>
-                <p>Сделать чистую питьевую воду и качественные развлечения доступными для каждого жителя Сербии.</p>
+                <h3>
+                    {% if current_language == 'ru' %}Наша миссия{% else %}Naša misija{% endif %}
+                </h3>
+                <p>
+                    {% if current_language == 'ru' %}
+                        Сделать чистую питьевую воду и качественные развлечения доступными для каждого жителя Сербии.
+                    {% else %}
+                        Učiniti čistu pitku vodu i kvalitetne zabave dostupnim svakom stanovniku Srbije.
+                    {% endif %}
+                </p>
 
-                <h3>Наши ценности</h3>
+                <h3>
+                    {% if current_language == 'ru' %}Наши ценности{% else %}Naše vrednosti{% endif %}
+                </h3>
                 <ul>
-                    <li>Качество обслуживания</li>
-                    <li>Надежность партнерства</li>
-                    <li>Инновационные решения</li>
-                    <li>Забота о клиентах</li>
+                    <li>
+                        {% if current_language == 'ru' %}Качество обслуживания{% else %}Kvalitet usluga{% endif %}
+                    </li>
+                    <li>
+                        {% if current_language == 'ru' %}Надежность партнерства{% else %}Pouzdanost partnerstva{% endif %}
+                    </li>
+                    <li>
+                        {% if current_language == 'ru' %}Инновационные решения{% else %}Inovativna rešenja{% endif %}
+                    </li>
+                    <li>
+                        {% if current_language == 'ru' %}Забота о клиентах{% else %}Briga o klijentima{% endif %}
+                    </li>
                 </ul>
             </div>
 
             <div class="about-stats">
                 <div class="stat-item">
                     <div class="stat-number">300+</div>
-                    <div class="stat-label">установленных автоматов</div>
+                     <div class="stat-label">
+                        {% if current_language == 'ru' %}установленных автоматов{% else %}postavljenih automata{% endif %}
+                    </div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">5+</div>
-                    <div class="stat-label">городов Сербии</div>
+                    <div class="stat-label">
+                        {% if current_language == 'ru' %}городов Сербии{% else %}gradova u Srbiji{% endif %}
+                    </div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">10+</div>
-                    <div class="stat-label">лет на рынке</div>
+                    <div class="stat-label">
+                        {% if current_language == 'ru' %}лет на рынке{% else %}godina na tržištu{% endif %}
+                    </div>
                 </div>
             </div>
         </div>

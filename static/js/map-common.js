@@ -36,13 +36,13 @@ function createPopupContent(point) {
     popupDiv.className = 'map-popup';
 
     const title = document.createElement('h3');
-    title.textContent = point.name || 'Точка';
+    title.textContent = point.name || 'Tačka';
     popupDiv.appendChild(title);
 
     if (point.address) {
         const address = document.createElement('p');
         const addressLabel = document.createElement('strong');
-        addressLabel.textContent = 'Адрес: ';
+        addressLabel.textContent = 'Adresa: ';
         address.appendChild(addressLabel);
         address.appendChild(document.createTextNode(point.address));
         popupDiv.appendChild(address);
@@ -51,7 +51,7 @@ function createPopupContent(point) {
     if (point.city) {
         const city = document.createElement('p');
         const cityLabel = document.createElement('strong');
-        cityLabel.textContent = 'Город: ';
+        cityLabel.textContent = 'Grad: ';
         city.appendChild(cityLabel);
         city.appendChild(document.createTextNode(point.city));
         popupDiv.appendChild(city);
@@ -70,17 +70,17 @@ function showErrorMessage(mapElement, error) {
     errorContainer.className = 'map-error';
 
     const title = document.createElement('h3');
-    title.textContent = 'Карта временно недоступна';
+    title.textContent = 'Mapa je privremeno nedostupna';
     errorContainer.appendChild(title);
 
     const message = document.createElement('p');
-    message.textContent = 'Попробуйте обновить страницу или зайти позже.';
+    message.textContent = 'Pokušajte da osvežite stranicu ili se vratite kasnije.';
     errorContainer.appendChild(message);
 
     if (error && error.message) {
         const errorText = document.createElement('p');
         errorText.className = 'error-details';
-        errorText.textContent = `Ошибка: ${error.message}`;
+        errorText.textContent = `Greška: ${error.message}`;
         errorContainer.appendChild(errorText);
     }
 
@@ -95,11 +95,11 @@ function createSearchControl(map) {
 
             const searchInput = L.DomUtil.create('input', 'search-input', searchContainer);
             searchInput.type = 'text';
-            searchInput.placeholder = 'Поиск по адресу...';
+            searchInput.placeholder = 'Pretraga po adresi...';
 
             const searchButton = L.DomUtil.create('button', 'search-button', searchContainer);
             searchButton.innerHTML = '🔍';
-            searchButton.title = 'Поиск';
+            searchButton.title = 'Pretraga';
 
             L.DomEvent.disableClickPropagation(searchContainer);
 
@@ -115,37 +115,6 @@ function createSearchControl(map) {
 
             return searchContainer;
         },
-
-        // performSearch: function(query, map) {
-        //     if (!query.trim()) return;
-
-        //     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`;
-
-        //     fetch(url)
-        //         .then(response => response.json())
-        //         .then(data => {
-        //             if (data && data.length > 0) {
-        //                 const result = data[0];
-        //                 map.setView([result.lat, result.lon], 15);
-
-        //                 const popupContent = document.createElement('div');
-        //                 const popupText = document.createElement('strong');
-        //                 popupText.textContent = result.display_name;
-        //                 popupContent.appendChild(popupText);
-
-        //                 L.popup()
-        //                     .setLatLng([result.lat, result.lon])
-        //                     .setContent(popupContent)
-        //                     .openOn(map);
-        //             } else {
-        //                 alert('Адрес не найден');
-        //             }
-        //         })
-        //         .catch(error => {
-        //             console.error('Search error:', error);
-        //             alert('Ошибка при поиске');
-        //         });
-        // }
 
         performSearch: function(query, map) {
             if (!query.trim()) return;
@@ -187,22 +156,22 @@ function createSearchControl(map) {
                             .setContent(popupContent)
                             .openOn(map);
                     } else {
-                        alert('Адрес не найден. Попробуйте другой запрос.');
+                        alert('Adresa nije pronađena. Pokušajte drugi zahtev.');
                     }
                 })
                 .catch(error => {
                     console.error('Search error:', error);
 
-                    let errorMessage = 'Ошибка при поиске. ';
+                    let errorMessage = 'Greška pri pretrazi. ';
 
                     if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-                        errorMessage += 'Проверьте подключение к интернету.';
+                        errorMessage += 'Proverite internet konekciju.';
                     } else if (error.message.includes('HTTP error')) {
-                        errorMessage += 'Сервис поиска временно недоступен.';
+                        errorMessage += 'Servis pretrage je privremeno nedostupan.';
                     } else if (error.message.includes('quota') || error.message.includes('limit')) {
-                        errorMessage += 'Достигнут дневной лимит поиска. Попробуйте завтра.';
+                        errorMessage += 'Dnevni limit pretrage je dostignut. Pokušajte sutra.';
                     } else {
-                        errorMessage += 'Попробуйте позже.';
+                        errorMessage += 'Pokušajte kasnije.';
                     }
 
                     alert(errorMessage);
@@ -226,7 +195,7 @@ function createFullscreenControl(mapElement) {
         onAdd: function(map) {
             const fullscreenButton = L.DomUtil.create('button', 'fullscreen-control');
             fullscreenButton.textContent = '⛶';
-            fullscreenButton.title = 'Полноэкранный режим';
+            fullscreenButton.title = 'Režim punog ekrana';
 
             L.DomEvent.disableClickPropagation(fullscreenButton);
             L.DomEvent.on(fullscreenButton, 'click', () => {
@@ -299,7 +268,7 @@ function createPointsControl(markers, map, title) {
 
             const pointsButton = L.DomUtil.create('button', 'points-control');
             pointsButton.textContent = '📋';
-            pointsButton.title = title || 'Список точек';
+            pointsButton.title = title || 'Lista tačaka';
 
             L.DomEvent.disableClickPropagation(pointsButton);
             L.DomEvent.on(pointsButton, 'click', () => {
@@ -309,21 +278,6 @@ function createPointsControl(markers, map, title) {
             return pointsButton;
         },
 
-        // toggleSidePanel: function(markers, map, title) {
-        //     const mapContainer = map.getContainer();
-        //     let sidePanel = mapContainer.querySelector('.map-side-panel');
-
-        //     if (sidePanel) {
-        //         sidePanel.remove();
-        //         mapContainer.classList.remove('map-with-side-panel');
-        //     } else {
-        //         this.createSidePanel(markers, map, title, mapContainer);
-        //     }
-
-        //     setTimeout(() => {
-        //         map.invalidateSize();
-        //     }, 100);
-        // },
         toggleSidePanel: function(markers, map, title) {
             let sidePanel = mapContainer.querySelector('.map-side-panel');
 
@@ -343,18 +297,13 @@ function createPointsControl(markers, map, title) {
             header.className = 'side-panel-header';
 
             const titleElement = document.createElement('h3');
-            titleElement.textContent = title || 'Список точек';
+            titleElement.textContent = title || 'Lista tačaka';
             header.appendChild(titleElement);
 
             const closeButton = document.createElement('button');
             closeButton.className = 'side-panel-close';
             closeButton.innerHTML = '×';
-            closeButton.title = 'Закрыть';
-            // closeButton.addEventListener('click', () => {
-            //     sidePanel.remove();
-            //     mapContainer.classList.remove('map-with-side-panel');
-            //     map.invalidateSize();
-            // });
+            closeButton.title = 'Zatvori';
             closeButton.addEventListener('click', () => {
                 this.closeSidePanel();
             });
@@ -395,7 +344,7 @@ function createPointsControl(markers, map, title) {
             if (markers.length === 0) {
                 const emptyMessage = document.createElement('div');
                 emptyMessage.className = 'side-panel-empty';
-                emptyMessage.textContent = 'Точки не найдены';
+                emptyMessage.textContent = 'Tačke nisu pronađene';
                 list.appendChild(emptyMessage);
             } else {
                 markers.forEach(item => {
@@ -439,7 +388,6 @@ function createPointsControl(markers, map, title) {
                 map.setView([item.data.lat, item.data.lng], 16);
                 item.marker.openPopup();
 
-                // this.highlightSelectedPoint(pointElement, sidePanel);
                 // Автоматическое закрытие панели на мобильных
                 if (isMobileDevice()) {
                     setTimeout(() => {
@@ -492,7 +440,7 @@ function addMapControls(map, markers, mapElement, options = {}) {
         searchEnabled = true,
         fullscreenEnabled = true,
         pointsListEnabled = true,
-        pointsListTitle = 'Список точек'
+        pointsListTitle = 'Lista tačaka'
     } = options;
 
     // Добавляем поиск
@@ -575,11 +523,11 @@ function createCustomZoomControl(map) {
 
             const zoomIn = L.DomUtil.create('button', 'zoom-btn zoom-in', zoomContainer);
             zoomIn.textContent = '+';
-            zoomIn.title = 'Увеличить';
+            zoomIn.title = 'Увеличить/Uvećaj';
 
             const zoomOut = L.DomUtil.create('button', 'zoom-btn zoom-out', zoomContainer);
             zoomOut.textContent = '−';
-            zoomOut.title = 'Уменьшить';
+            zoomOut.title = 'Уменьшить/Umanji';
 
             L.DomEvent.disableClickPropagation(zoomContainer);
 

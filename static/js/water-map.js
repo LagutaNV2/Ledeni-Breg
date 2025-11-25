@@ -72,7 +72,7 @@ function initWaterMap(points) {
         // Добавляем элементы управления
         const mapElement = document.getElementById('water-map');
         addMapControls(map, markers, mapElement, {
-            pointsListTitle: 'Список водоматов'
+            pointsListTitle: 'Lista vodomata'
         });
 
         // Адаптация для мобильных устройств
@@ -83,12 +83,6 @@ function initWaterMap(points) {
         setTimeout(() => {
             if (map) {
                 map.invalidateSize(true);
-                // Принудительно открываем первый попап для тестирования
-                // if (markers.length > 0) {
-                //     setTimeout(() => {
-                //         markers[0].marker.openPopup();
-                //     }, 1000);
-                // }
             }
         }, 500);
 

@@ -7,6 +7,7 @@ from apps.map_points.models import MapPoint
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
+from django.utils import translation
 from django.template.loader import render_to_string
 from apps.applications.forms import ApplicationForm
 from apps.applications.models import Application
@@ -19,11 +20,19 @@ import logging
 logger = logging.getLogger('apps.core')
 
 def home(request):
-    return render(request, 'core/home.html')
+    current_language = request.COOKIES.get('django_language', 'sr')
+    context = {
+        'current_language': current_language,
+        'languages': settings.LANGUAGES,
+    }
+    return render(request, 'core/home.html', context)
 
 def about(request):
+    current_language = request.COOKIES.get('django_language', 'sr')
     context = {
         'company_info': 'Ledeni Breg - ведущая компания по установке автоматов в Сербии...',
+        'current_language': current_language,
+        'languages': settings.LANGUAGES,
         # добавить другие данные если нужно
     }
     return render(request, 'core/about.html', context)
@@ -72,8 +81,10 @@ def press(request):
     return render(request, 'core/press.html')
 
 def contacts(request):
+    current_language = request.COOKIES.get('django_language', 'sr')
     context = {
-        'page_title': 'Kontakti - Ledeni Breg',
+        'current_language': current_language,
+        'languages': settings.LANGUAGES,
     }
     return render(request, 'core/contacts.html', context)
 
@@ -142,6 +153,32 @@ def custom_404(request, exception):
 
 def custom_500(request):
     return render(request, 'core/500.html', status=500)
+
+def set_language(request):
+    """Устанавливает язык в cookies"""
+    if request.method == 'POST':
+        language = request.POST.get('language', 'sr')
+        logger.info(f"Language switch attempt: {language}, referer: {request.META.get('HTTP_REFERER', '/')}")
+
+        if language in [lang[0] for lang in settings.LANGUAGES]:
+            translation.activate(language)
+            request.LANGUAGE_CODE = translation.get_language()
+
+            response = redirect(request.META.get('HTTP_REFERER', '/'))
+            response.set_cookie('django_language', language, max_age=365*24*60*60)
+            logger.info(f"Language successfully switched to: {language}")
+            return response
+        else:
+            logger.warning(f"Invalid language code: {language}")
+    else:
+        logger.warning("set_language called without POST method")
+
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+
+def get_current_language(request):
+    """Получает текущий язык из cookie или использует язык по умолчанию"""
+    return request.COOKIES.get('django_language', 'sr')
+
 
 # отладочная функция для проверки подключения к базе данных
 def debug_database(request):

@@ -11,8 +11,16 @@
 <section class="contacts-section">
     <div class="container">
         <div class="contacts-header">
-            <h1>Kontaktirajte nas</h1>
-            <p>Stojimo vam na raspolaganju za sva pitanja i saradnju</p>
+            <h1>
+                {% if current_language == 'ru' %}Свяжитесь с нами{% else %}Kontaktirajte nas{% endif %}
+            </h1>
+            <p>
+                {% if current_language == 'ru' %}
+                    Мы к вашим услугам для всех вопросов и сотрудничества
+                {% else %}
+                    Stojimo vam na raspolaganju za sva pitanja i saradnju
+                {% endif %}
+            </p>
         </div>
 
         <div class="contacts-content">
@@ -25,7 +33,9 @@
                         <div class="contact-item modern">
                             <div class="contact-icon">📍</div>
                             <div class="contact-details">
-                                <span class="label">Adresa</span>
+                                <span class="label">
+                                    {% if current_language == 'ru' %}Адрес{% else %}Adresa{% endif %}
+                                </span>
                                 <span class="value">Srbija, Kragujevac</span>
                             </div>
                         </div>
@@ -49,8 +59,12 @@
                         <div class="contact-item modern">
                             <div class="contact-icon">🕒</div>
                             <div class="contact-details">
-                                <span class="label">Radno vreme</span>
-                                <span class="value">Pon - Pet: 08:00 - 16:00</span>
+                                <span class="label">
+                                    {% if current_language == 'ru' %}Рабочее время{% else %}Radno vreme{% endif %}
+                                </span>
+                                <span class="value">
+                                    {% if current_language == 'ru' %}Пн-Пт: 08:00-16:00{% else %}Pon - Pet: 08:00 - 16:00{% endif %}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -59,7 +73,9 @@
 
             <!-- Блок быстрых действий -->
             <div class="contact-block quick-actions">
-                <h2>Brzi kontakti</h2>
+                <h2>
+                    {% if current_language == 'ru' %}Быстрые контакты{% else %}Brzi kontakti{% endif %}
+                </h2>
                 <div class="action-buttons">
                     <a href="viber://chat?number=+381677898477" class="btn btn-viber">
                         <span class="btn-icon">💬</span>
@@ -67,11 +83,12 @@
                     </a>
                     <a href="tel:+381677898477" class="btn btn-call">
                         <span class="btn-icon">📞</span>
-                        Pozovite nas
+                        {% if current_language == 'ru' %}Позвонить{% else %}Pozovite nas{% endif %}
+
                     </a>
                     <a href="{% url 'application' %}" class="btn btn-water">
                         <span class="btn-icon">📝</span>
-                        Popunite prijavu
+                        {% if current_language == 'ru' %}Заполнить заявку{% else %}Popunite prijavu{% endif %}
                     </a>
                 </div>
             </div>

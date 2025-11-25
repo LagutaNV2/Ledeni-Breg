@@ -64,6 +64,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'apps.core.context_processors.language_context',
             ],
         },
     },
@@ -76,10 +77,17 @@ DATABASES = {
     }
 }
 
+# Языковые настройки
 LANGUAGE_CODE = 'sr'
 TIME_ZONE = 'Europe/Belgrade'
 USE_I18N = True
 USE_TZ = True
+
+# Наши поддерживаемые языки
+LANGUAGES = [
+    ('sr', 'SR'),
+    ('ru', 'RU'),
+]
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / '../static']

@@ -2,7 +2,7 @@
 <footer class="footer">
     <div class="footer-content">
         <div class="footer-social">
-            <h3>Свяжитесь с нами:</h3>
+            <h3>{% if current_language == 'ru' %}Свяжитесь с нами{% else %}Kontaktirajte nas{% endif %}:</h3>
             <div class="social-icons">
                 <a href="viber://chat?number=+381677898477" class="social-link viber">
                     <span>Viber</span>

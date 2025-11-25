@@ -4,6 +4,8 @@
 from .base import *
 import os
 from dotenv import load_dotenv
+from pathlib import Path
+from decouple import config
 
 load_dotenv()
 
@@ -48,12 +50,22 @@ LOGGING = {
     'disable_existing_loggers': False,
     'handlers': {
         'console': {
-            'class': 'logging.StreamHandler',
+            'class': 'logging.StreamHandler',  # Используем StreamHandler для вывода в консоль
+            'level': 'DEBUG',
+            'formatter': 'verbose',  # Добавляем форматтер (определим его ниже)
         },
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': 'debug.log',
+            'formatter': 'verbose',  # Также используем форматтер
+        },
+    },
+    'formatters': {
+        'verbose': {  # Определяем формат логов
+            'format': '[{asctime}] {levelname} {module}: {message}',
+            'style': '{',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
         },
     },
     'root': {
@@ -62,7 +74,7 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': ['console', 'file'],
+            'handlers': ['console'],
             'level': 'INFO',
             'propagate': False,
         },
@@ -74,7 +86,7 @@ LOGGING = {
         'apps.core': {
             'handlers': ['console', 'file'],
             'level': 'DEBUG',
-            'propagate': False,
+            'propagate': True,
         },
     },
 }

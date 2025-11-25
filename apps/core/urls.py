@@ -13,6 +13,7 @@ urlpatterns = [
     path('press/', views.press, name='press'),
     path('contacts/', views.contacts, name='contacts'),
     path('application/', views.application, name='application'),
+    path('set-language/', views.set_language, name='set_language'),
     path('debug/database/', debug_database, name='debug_database'), # Отладочная страница
     path('test-email/', test_email_view, name='test_email'), # Страница для тестирования email
 ]
