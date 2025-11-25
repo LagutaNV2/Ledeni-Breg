@@ -5,15 +5,22 @@
     <meta charset="utf-8">
     <style>
         /* Стили остаются инлайновыми для совместимости с email-клиентами */
-        body { font-family: 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; background: #f5f7fa; margin: 0; padding: 20px; }
-        .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .header { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; padding: 30px 20px; text-align: center; }
-        .header h1 { margin: 0; font-size: 28px; font-weight: 700; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; background: #f8f9fa; margin: 0; padding: 0; }
+        .container { max-width: 650px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1); border: 1px solid #e1e5ee; }
+        .header { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; padding: 25px 30px; text-align: center; }
+        .header h1 { margin: 0; font-size: 26px; font-weight: 600; letter-spacing: 0.5px; }
         .content { padding: 30px; }
-        .field { margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #1e3c72; }
-        .label { font-weight: bold; color: #1e3c72; display: block; margin-bottom: 5px; }
-        .value { color: #333; font-size: 16px; }
-        .footer { margin-top: 30px; padding: 20px; text-align: center; color: #666; font-size: 14px; background: #f8f9fa; border-top: 1px solid #e1e5ee; }
+        .info-table {width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
+        .info-table th {background: #f8f9fa; text-align: left; padding: 14px 20px; font-weight: 600; color: #1e3c72; border-bottom: 2px solid #e1e5ee; width: 35%; }
+        .info-table td {padding: 14px 20px; border-bottom: 1px solid #f0f0f0; background: white; }
+        .info-table tr:last-child td {border-bottom: none; }
+        .info-table tr:hover td {background: #fafbff; }
+        .section-title {font-size: 18px; font-weight: 600; color: #1e3c72; margin: 25px 0 15px 0; padding-bottom: 8px; border-bottom: 2px solid #e1e5ee; }
+        .comment-section {background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #1e3c72; }
+        .comment-label {font-weight: 600; color: #1e3c72; margin-bottom: 8px; display: block; }
+        .footer {margin-top: 30px; padding: 25px 30px; text-align: center; color: #666; font-size: 14px; background: #f8f9fa; border-top: 1px solid #e1e5ee; }
+        .footer p {margin: 5px 0; }
+        .logo-text {font-weight: 700; color: #1e3c72; font-size: 16px; }
     </style>
 </head>
 <body>
@@ -23,51 +30,63 @@
         </div>
 
         <div class="content">
-            <div class="field">
-                <span class="label">Tip automata:</span>
-                <span class="value">{{ application.get_machine_type_display }}</span>
-            </div>
+            <div class="section-title">📊 Osnovne informacije</div>
+            <table class="info-table">
+                <tr>
+                    <th>Tip automata:</th>
+                    <td><strong>{{ application.get_machine_type_display }}</strong></td>
+                </tr>
+                <tr>
+                    <th>Količina:</th>
+                    <td><strong>{{ application.quantity }} komada</strong></td>
+                </tr>
+                <tr>
+                    <th>Datum prijave:</th>
+                    <td>{{ application.created_date|date:"d.m.Y H:i" }}</td>
+                </tr>
+            </table>
 
-            <div class="field">
-                <span class="label">Količina:</span>
-                <span class="value">{{ application.quantity }} komada</span>
-            </div>
+            <div class="section-title">📍 Lokacija</div>
+            <table class="info-table">
+                <tr>
+                    <th>Grad:</th>
+                    <td>{{ application.city }}</td>
+                </tr>
+                <tr>
+                    <th>Ulica i broj:</th>
+                    <td>{{ application.street }} {{ application.building }}</td>
+                </tr>
+            </table>
 
-            <div class="field">
-                <span class="label">Adresa:</span>
-                <span class="value">{{ application.city }}, {{ application.street }} {{ application.building }}</span>
-            </div>
-
-            <div class="field">
-                <span class="label">Ime i prezime:</span>
-                <span class="value">{{ application.full_name }}</span>
-            </div>
-
-            <div class="field">
-                <span class="label">Telefon:</span>
-                <span class="value">{{ application.phone }}</span>
-            </div>
-
-            <div class="field">
-                <span class="label">Email:</span>
-                <span class="value">{{ application.email }}</span>
-            </div>
+            <div class="section-title">👤 Kontakt informacije</div>
+            <table class="info-table">
+                <tr>
+                    <th>Ime i prezime:</th>
+                    <td><strong>{{ application.full_name }}</strong></td>
+                </tr>
+                <tr>
+                    <th>Telefon:</th>
+                    <td>{{ application.phone }}</td>
+                </tr>
+                <tr>
+                    <th>Email:</th>
+                    <td>{{ application.email }}</td>
+                </tr>
+            </table>
 
             {% if application.comment %}
-            <div class="field">
-                <span class="label">Komentar:</span>
-                <span class="value">{{ application.comment }}</span>
+            <div class="section-title">💬 Dodatne informacije</div>
+            <div class="comment-section">
+                <span class="comment-label">Komentar klijenta:</span>
+                <div style="color: #333; line-height: 1.5;">{{ application.comment }}</div>
             </div>
             {% endif %}
-
-            <div class="field">
-                <span class="label">Datum prijave:</span>
-                <span class="value">{{ application.created_date|date:"d.m.Y H:i" }}</span>
-            </div>
         </div>
 
         <div class="footer">
-            <p>Ovo je automatska poruka sa sajta Ledeni Breg</p>
+            <p style="font-size: 12px; color: #888; margin-top: 10px;">
+                Ova poruka je generisana automatski. Molimo ne odgovarajte na nju.
+            </p>
             <p>www.ledenibreg.com</p>
         </div>
     </div>

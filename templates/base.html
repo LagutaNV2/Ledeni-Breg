@@ -14,8 +14,75 @@
 
     <!-- Page-specific CSS -->
     {% block extra_css %}{% endblock %}
+
+    <!-- Language data for JavaScript -->
+    <script>
+        window.currentLanguage = '{{ current_language }}';
+        window.translations = {
+            'sr': {
+                'Map is temporarily unavailable': 'Mapa je privremeno nedostupna',
+                'Try refreshing the page or come back later.': 'Pokušajte da osvežite stranicu ili se vratite kasnije.',
+                'Error': 'Greška',
+                'Search by address...': 'Pretraga po adresi...',
+                'Search': 'Pretraga',
+                'Fullscreen mode': 'Režim punog ekrana',
+                'List of points': 'Lista tačaka',
+                'Close': 'Zatvori',
+                'Points not found': 'Tačke nisu pronađene',
+                'Address not found': 'Adresa nije pronađena',
+                'Try another query': 'Pokušajte drugi zahtev',
+                'Search error': 'Greška pri pretrazi',
+                'Check internet connection': 'Proverite internet konekciju',
+                'Search service unavailable': 'Servis pretrage je privremeno nedostupan',
+                'Daily search limit reached': 'Dnevni limit pretrage je dostignut',
+                'Try tomorrow': 'Pokušajte sutra',
+                'Try again later': 'Pokušajte kasnije',
+                'Zoom in': 'Uvećaj',
+                'Zoom out': 'Umanji',
+                'List of water points': 'Lista vodomata',
+                'List of toy machines': 'Lista automata sa igračkama',
+                'Demo point for testing': 'Demo tačka za testiranje',
+                'Address': 'Adresa',
+                'City': 'Grad',
+                'Point': 'Tačka'
+            },
+            'ru': {
+                'Map is temporarily unavailable': 'Карта временно недоступна',
+                'Try refreshing the page or come back later.': 'Попробуйте обновить страницу или вернитесь позже.',
+                'Error': 'Ошибка',
+                'Search by address...': 'Поиск по адресу...',
+                'Search': 'Поиск',
+                'Fullscreen mode': 'Полноэкранный режим',
+                'List of points': 'Список точек',
+                'Close': 'Закрыть',
+                'Points not found': 'Точки не найдены',
+                'Address not found': 'Адрес не найден',
+                'Try another query': 'Попробуйте другой запрос',
+                'Search error': 'Ошибка поиска',
+                'Check internet connection': 'Проверьте интернет-соединение',
+                'Search service unavailable': 'Сервис поиска временно недоступен',
+                'Daily search limit reached': 'Дневной лимит поиска исчерпан',
+                'Try tomorrow': 'Попробуйте завтра',
+                'Try again later': 'Попробуйте позже',
+                'Zoom in': 'Увеличить',
+                'Zoom out': 'Уменьшить',
+                'List of water points': 'Список водоматов',
+                'List of toy machines': 'Список автоматов с игрушками',
+                'Demo point for testing': 'Демо-точка для тестирования',
+                'Address': 'Адрес',
+                'City': 'Город',
+                'Point': 'Точка'
+            }
+        };
+
+        // Функция для получения перевода
+        function t(key) {
+            const lang = window.currentLanguage || 'sr';
+            return window.translations[lang]?.[key] || key;
+        }
+    </script>
 </head>
-<body>
+<body data-language="{{ current_language }}">
     {% include 'includes/header.html' %}
 
     <main>

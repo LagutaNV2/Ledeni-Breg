@@ -66,7 +66,7 @@ function initGrabberMap(points) {
         const mapElement = document.getElementById('grabber-map');
         // Добавляем элементы управления
         addMapControls(map, markers, mapElement, {
-            pointsListTitle: 'Lista automata sa igračkama'
+            pointsListTitle: t('List of toy machines')
         });
 
         // Адаптация для мобильных устройств
@@ -117,7 +117,7 @@ function showDemoPoints(map, icon) {
         const popupContent = marker.getPopup().getContent();
         const demoLabel = document.createElement('p');
         demoLabel.className = 'demo-label';
-        demoLabel.textContent = 'Демо-точка для тестирования';
+        demoLabel.textContent = t('Demo point for testing');
         popupContent.appendChild(demoLabel);
     });
 }

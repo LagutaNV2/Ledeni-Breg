@@ -9,18 +9,55 @@
 <div class="application-page">
     <div class="container">
         <div class="application-header">
-            <h1>Prijava za ugradnju automata</h1>
-            <p>Popunite formular ispod i naš tim će Vas kontaktirati u vezi postavljanja automata</p>
+            <h1>
+                {% if current_language == 'ru' %}
+                    Заявка на установку автомата
+                {% else %}
+                    Prijava za ugradnju automata
+                {% endif %}
+            </h1>
+            <p>
+                {% if current_language == 'ru' %}
+                    Заполните форму ниже и наша команда свяжется с вами относительно установки автомата
+                {% else %}
+                    Popunite formular ispod i naš tim će Vas kontaktirati u vezi postavljanja automata
+                {% endif %}
+            </p>
         </div>
 
         <!-- Сообщение об успехе (сценарий 1) -->
         {% if show_success %}
         <div class="success-container" id="successMessage">
             <div class="success-icon">✓</div>
-            <h2>Uspešno ste poslali prijavu!</h2>
+            <h2>
+                {% if current_language == 'ru' %}
+                    Заявка успешно отправлена!
+                {% else %}
+                    Uspešno ste poslali prijavu!
+                {% endif %}
+            </h2>
             <p>Vaša prijava je uspešno poslata. Kontaktiraćemo Vas u najkraćem roku.</p>
-            <p class="countdown">Preusmeravanje na početnu stranu za <span id="countdown">60</span> sekundi...</p>
-            <a href="{% url 'home' %}" class="btn btn-home">Vratite se na početnu stranu</a>
+            <p>
+                {% if current_language == 'ru' %}
+                    Ваша заявка успешно отправлена. Свяжемся с вами в кратчайшие сроки.
+                {% else %}
+                    Vaša prijava je uspešno poslata. Kontaktiraćemo Vas u najkraćem roku.
+                {% endif %}
+            </p>
+            <p class="countdown">
+                {% if current_language == 'ru' %}
+                    Перенаправление на главную страницу через <span id="countdown">60</span> секунд...
+                {% else %}
+                    Preusmeravanje na početnu stranu za <span id="countdown">60</span> sekundi...
+                {% endif %}
+            </p>
+            <a href="{% url 'home' %}" class="btn btn-home">
+                {% if current_language == 'ru' %}
+                    Вернуться на главную страницу
+                {% else %}
+                    Vratite se na početnu stranu
+                {% endif %}
+            </a>
         </div>
         {% endif %}
 
@@ -30,11 +67,19 @@
             {% csrf_token %}
 
             <div class="form-section">
-                <h3>Informacije o automatu</h3>
+                <h3>
+                    {% if current_language == 'ru' %}
+                        Информация об автомате
+                    {% else %}
+                        Informacije o automatu
+                    {% endif %}
+                </h3>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="{{ form.machine_type.id_for_label }}">Tip automata *</label>
+                        <label for="{{ form.machine_type.id_for_label }}">
+                            {% if current_language == 'ru' %}Тип автомата *{% else %}Tip automata *{% endif %}
+                        </label>
                         {{ form.machine_type }}
                         {% if form.machine_type.errors %}
                         <div class="error-text">{{ form.machine_type.errors }}</div>
@@ -42,7 +87,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="{{ form.quantity.id_for_label }}">Količina *</label>
+                        <label for="{{ form.quantity.id_for_label }}">
+                            {% if current_language == 'ru' %}Количество *{% else %}Količina *{% endif %}
+                        </label>
                         {{ form.quantity }}
                         {% if form.quantity.errors %}
                         <div class="error-text">{{ form.quantity.errors }}</div>
@@ -52,10 +99,18 @@
             </div>
 
             <div class="form-section">
-                <h3>Adresa postavljanja</h3>
+                <h3>
+                    {% if current_language == 'ru' %}
+                        Адрес установки
+                    {% else %}
+                        Adresa postavljanja
+                    {% endif %}
+                </h3>
 
                 <div class="form-group">
-                    <label for="{{ form.city.id_for_label }}">Grad *</label>
+                    <label for="{{ form.city.id_for_label }}">
+                        {% if current_language == 'ru' %}Город *{% else %}Grad *{% endif %}
+                    </label>
                     {{ form.city }}
                     {% if form.city.errors %}
                     <div class="error-text">{{ form.city.errors }}</div>
@@ -64,7 +119,9 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="{{ form.street.id_for_label }}">Ulica *</label>
+                        <label for="{{ form.street.id_for_label }}">
+                            {% if current_language == 'ru' %}Улица *{% else %}Ulica *{% endif %}
+                        </label>
                         {{ form.street }}
                         {% if form.street.errors %}
                         <div class="error-text">{{ form.street.errors }}</div>
@@ -72,7 +129,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="{{ form.building.id_for_label }}">Broj zgrade *</label>
+                        <label for="{{ form.building.id_for_label }}">
+                            {% if current_language == 'ru' %}Номер здания *{% else %}Broj zgrade *{% endif %}
+                        </label>
                         {{ form.building }}
                         {% if form.building.errors %}
                         <div class="error-text">{{ form.building.errors }}</div>
@@ -82,10 +141,18 @@
             </div>
 
             <div class="form-section">
-                <h3>Kontakt informacije</h3>
+                <h3>
+                    {% if current_language == 'ru' %}
+                        Контактная информация
+                    {% else %}
+                        Kontakt informacije
+                    {% endif %}
+                </h3>
 
                 <div class="form-group">
-                    <label for="{{ form.full_name.id_for_label }}">Ime i prezime *</label>
+                    <label for="{{ form.full_name.id_for_label }}">
+                        {% if current_language == 'ru' %}Имя и фамилия *{% else %}Ime i prezime *{% endif %}
+                    </label>
                     {{ form.full_name }}
                     {% if form.full_name.errors %}
                     <div class="error-text">{{ form.full_name.errors }}</div>
@@ -94,7 +161,9 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="{{ form.phone.id_for_label }}">Telefon *</label>
+                        <label for="{{ form.phone.id_for_label }}">
+                            {% if current_language == 'ru' %}Телефон *{% else %}Telefon *{% endif %}
+                        </label>
                         {{ form.phone }}
                         {% if form.phone.errors %}
                         <div class="error-text">{{ form.phone.errors }}</div>
@@ -113,7 +182,13 @@
 
             <div class="form-section">
                 <div class="form-group">
-                    <label for="{{ form.comment.id_for_label }}">Dodatne informacije ili želje</label>
+                    <label for="{{ form.comment.id_for_label }}">
+                        {% if current_language == 'ru' %}
+                            Дополнительная информация или пожелания
+                        {% else %}
+                            Dodatne informacije ili želje
+                        {% endif %}
+                    </label>
                     {{ form.comment }}
                     {% if form.comment.errors %}
                     <div class="error-text">{{ form.comment.errors }}</div>
@@ -122,7 +197,9 @@
             </div>
 
             <div class="form-submit">
-                <button type="submit" class="btn-submit">Pošaljite prijavu</button>
+                <button type="submit" class="btn-submit">
+                    {% if current_language == 'ru' %}Отправить заявку{% else %}Pošaljite prijavu{% endif %}
+                </button>
             </div>
         </form>
         {% endif %}
@@ -130,45 +207,88 @@
         <!-- Просмотр данных заявки (сценарий 2) -->
         {% if show_email_error %}
         <div class="application-data">
-            <h3>Podaci vaše prijave:</h3>
+            <h3>
+                {% if current_language == 'ru' %}
+                    Данные вашей заявки:
+                {% else %}
+                    Podaci vaše prijave:
+                {% endif %}
+            </h3>
 
             <div class="data-section">
-                <h4>Informacije o automatu</h4>
+                <h4>
+                    {% if current_language == 'ru' %}
+                        Информация об автомате
+                    {% else %}
+                        Informacije o automatu
+                    {% endif %}
+                </h4>
                 <div class="data-row">
                     <div class="data-item">
-                        <strong>Tip automata:</strong>
+                        <strong>
+                            {% if current_language == 'ru' %}Тип автомата:{% else %}Tip automata:{% endif %}
+                        </strong>
                         <span>
-                            {% if form_data.machine_type == 'water' %}Vodomat{% else %}Igracki{% endif %}
+                            {% if form_data.machine_type == 'water' %}
+                                {% if current_language == 'ru' %}Водомат{% else %}Vodomat{% endif %}
+                            {% else %}
+                                {% if current_language == 'ru' %}Игрушки{% else %}Igrački{% endif %}
+                            {% endif %}
                         </span>
                     </div>
                     <div class="data-item">
-                        <strong>Količina:</strong>
-                        <span>{{ form_data.quantity }} komada</span>
+                        <strong>
+                            {% if current_language == 'ru' %}Количество:{% else %}Količina:{% endif %}
+                        </strong>
+                        <span>
+                            {{ form_data.quantity }}
+                            {% if current_language == 'ru' %}штук{% else %}komada{% endif %}
+                        </span>
                     </div>
                 </div>
             </div>
 
             <div class="data-section">
-                <h4>Adresa postavljanja</h4>
+                <h4>
+                    {% if current_language == 'ru' %}
+                        Адрес установки
+                    {% else %}
+                        Adresa postavljanja
+                    {% endif %}
+                </h4>
                 <div class="data-item">
-                    <strong>Adresa:</strong>
+                    <strong>
+                        {% if current_language == 'ru' %}Адрес:{% else %}Adresa:{% endif %}
+                    </strong>
                     <span>{{ form_data.city }}, {{ form_data.street }} {{ form_data.building }}</span>
                 </div>
             </div>
 
             <div class="data-section">
-                <h4>Kontakt informacije</h4>
+                <h4>
+                    {% if current_language == 'ru' %}
+                        Контактная информация
+                    {% else %}
+                        Kontakt informacije
+                    {% endif %}
+                </h4>
                 <div class="data-item">
-                    <strong>Ime i prezime:</strong>
+                    <strong>
+                        {% if current_language == 'ru' %}Имя и фамилия:{% else %}Ime i prezime:{% endif %}
+                    </strong>
                     <span>{{ form_data.full_name }}</span>
                 </div>
                 <div class="data-row">
                     <div class="data-item">
-                        <strong>Telefon:</strong>
+                        <strong>
+                            {% if current_language == 'ru' %}Телефон:{% else %}Telefon:{% endif %}
+                        </strong>
                         <span>{{ form_data.phone }}</span>
                     </div>
                     <div class="data-item">
-                        <strong>Email:</strong>
+                        <strong>
+                            {% if current_language == 'ru' %}Email:{% else %}Email:{% endif %}
+                        </strong>
                         <span>{{ form_data.email }}</span>
                     </div>
                 </div>
@@ -176,7 +296,13 @@
 
             {% if form_data.comment %}
             <div class="data-section">
-                <h4>Dodatne informacije</h4>
+                <h4>
+                    {% if current_language == 'ru' %}
+                        Дополнительная информация
+                    {% else %}
+                        Dodatne informacije
+                    {% endif %}
+                </h4>
                 <div class="data-item">
                     <span>{{ form_data.comment }}</span>
                 </div>
@@ -184,7 +310,13 @@
             {% endif %}
 
             <div class="data-note">
-                <p>Vaša prijava je uspešno sačuvana. Kontaktiraćemo Vas putem telefona.</p>
+                <p>
+                    {% if current_language == 'ru' %}
+                        Ваша заявка успешно сохранена. Свяжемся с вами по телефону.
+                    {% else %}
+                        Vaša prijava je uspešno sačuvana. Kontaktiraćemo Vas putem telefona.
+                    {% endif %}
+                </p>
             </div>
         </div>
         {% endif %}
@@ -196,18 +328,40 @@
 <div class="modal-overlay" id="errorModal">
     <div class="modal">
         <div class="modal-header">
-            <h3>Greška pri slanju</h3>
+            <h3>
+                {% if current_language == 'ru' %}
+                    Ошибка при отправке
+                {% else %}
+                    Greška pri slanju
+                {% endif %}
+            </h3>
         </div>
         <div class="modal-content">
             {% if show_email_error %}
-            <p>Vaša prijava je sačuvana, ali došlo je do greške pri slanju email obaveštenja. Kontaktiraćemo Vas putem telefona.</p>
+            <p>
+                {% if current_language == 'ru' %}
+                    Ваша заявка сохранена, но произошла ошибка при отправке email уведомления. Свяжемся с вами по телефону.
+                {% else %}
+                    Vaša prijava je sačuvana, ali došlo je do greške pri slanju email obaveštenja. Kontaktiraćemo Vas putem telefona.
+                {% endif %}
+            </p>
             {% elif show_validation_error %}
-            <p>Došlo je do greške u formularu. Molimo Vas ispravite označena polja ispod.</p>
+            <p>
+                {% if current_language == 'ru' %}
+                    Произошла ошибка в форме. Пожалуйста, исправьте отмеченные поля ниже.
+                {% else %}
+                    Došlo je do greške u formularu. Molimo Vas ispravite označena polja ispod.
+                {% endif %}
+            </p>
             {% endif %}
         </div>
         <div class="modal-buttons">
-            <button type="button" class="btn btn-close" onclick="closeModal()">Zatvori</button>
-            <a href="{% url 'home' %}" class="btn btn-home">Vratite se na početnu stranu</a>
+            <button type="button" class="btn btn-close" onclick="closeModal()">
+                {% if current_language == 'ru' %}Закрыть и посмотри форму{% else %}Zatvori i pogledaj zahtev{% endif %}
+            </button>
+            <a href="{% url 'home' %}" class="btn btn-home">
+                {% if current_language == 'ru' %}Вернуться на главную страницу{% else %}Vratite se na početnu stranu{% endif %}
+            </a>
         </div>
     </div>
 </div>

@@ -36,13 +36,13 @@ function createPopupContent(point) {
     popupDiv.className = 'map-popup';
 
     const title = document.createElement('h3');
-    title.textContent = point.name || 'Tačka';
+    title.textContent = point.name || t('Point');
     popupDiv.appendChild(title);
 
     if (point.address) {
         const address = document.createElement('p');
         const addressLabel = document.createElement('strong');
-        addressLabel.textContent = 'Adresa: ';
+        addressLabel.textContent = t('Address') + ': ';
         address.appendChild(addressLabel);
         address.appendChild(document.createTextNode(point.address));
         popupDiv.appendChild(address);
@@ -51,7 +51,7 @@ function createPopupContent(point) {
     if (point.city) {
         const city = document.createElement('p');
         const cityLabel = document.createElement('strong');
-        cityLabel.textContent = 'Grad: ';
+        cityLabel.textContent = t('City') + ': ';
         city.appendChild(cityLabel);
         city.appendChild(document.createTextNode(point.city));
         popupDiv.appendChild(city);
@@ -70,17 +70,17 @@ function showErrorMessage(mapElement, error) {
     errorContainer.className = 'map-error';
 
     const title = document.createElement('h3');
-    title.textContent = 'Mapa je privremeno nedostupna';
+    title.textContent = t('Map is temporarily unavailable');
     errorContainer.appendChild(title);
 
     const message = document.createElement('p');
-    message.textContent = 'Pokušajte da osvežite stranicu ili se vratite kasnije.';
+    message.textContent = t('Try refreshing the page or come back later.');
     errorContainer.appendChild(message);
 
     if (error && error.message) {
         const errorText = document.createElement('p');
         errorText.className = 'error-details';
-        errorText.textContent = `Greška: ${error.message}`;
+        errorText.textContent = `${t('Error')}: ${error.message}`;
         errorContainer.appendChild(errorText);
     }
 
@@ -91,15 +91,15 @@ function showErrorMessage(mapElement, error) {
 function createSearchControl(map) {
     const SearchControl = L.Control.extend({
         onAdd: function(map) {
-            const searchContainer = L.DomUtil.create('div', 'search-control  mobile-optimized');
+            const searchContainer = L.DomUtil.create('div', 'search-control mobile-optimized');
 
             const searchInput = L.DomUtil.create('input', 'search-input', searchContainer);
             searchInput.type = 'text';
-            searchInput.placeholder = 'Pretraga po adresi...';
+            searchInput.placeholder = t('Search by address...');
 
             const searchButton = L.DomUtil.create('button', 'search-button', searchContainer);
-            searchButton.innerHTML = '🔍';
-            searchButton.title = 'Pretraga';
+            searchButton.textContent = '🔍';
+            searchButton.title = t('Search');
 
             L.DomEvent.disableClickPropagation(searchContainer);
 
@@ -119,7 +119,6 @@ function createSearchControl(map) {
         performSearch: function(query, map) {
             if (!query.trim()) return;
 
-            // Ваш API ключ OpenCage
             const apiKey = '49ccc4bbc07e45788dc79eb85de14eb5';
             const openCageUrl = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(query)}&key=${apiKey}&limit=1&language=sr&countrycode=rs`;
 
@@ -156,28 +155,27 @@ function createSearchControl(map) {
                             .setContent(popupContent)
                             .openOn(map);
                     } else {
-                        alert('Adresa nije pronađena. Pokušajte drugi zahtev.');
+                        alert(`${t('Address not found')}. ${t('Try another query')}.`);
                     }
                 })
                 .catch(error => {
                     console.error('Search error:', error);
 
-                    let errorMessage = 'Greška pri pretrazi. ';
+                    let errorMessage = `${t('Search error')}. `;
 
                     if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-                        errorMessage += 'Proverite internet konekciju.';
+                        errorMessage += t('Check internet connection');
                     } else if (error.message.includes('HTTP error')) {
-                        errorMessage += 'Servis pretrage je privremeno nedostupan.';
+                        errorMessage += t('Search service unavailable');
                     } else if (error.message.includes('quota') || error.message.includes('limit')) {
-                        errorMessage += 'Dnevni limit pretrage je dostignut. Pokušajte sutra.';
+                        errorMessage += `${t('Daily search limit reached')}. ${t('Try tomorrow')}.`;
                     } else {
-                        errorMessage += 'Pokušajte kasnije.';
+                        errorMessage += t('Try again later');
                     }
 
                     alert(errorMessage);
                 })
                 .finally(() => {
-                    // Убираем индикацию загрузки
                     if (searchContainer && searchButton) {
                         searchContainer.classList.remove('searching');
                         searchButton.disabled = false;
@@ -195,7 +193,7 @@ function createFullscreenControl(mapElement) {
         onAdd: function(map) {
             const fullscreenButton = L.DomUtil.create('button', 'fullscreen-control');
             fullscreenButton.textContent = '⛶';
-            fullscreenButton.title = 'Režim punog ekrana';
+            fullscreenButton.title = t('Fullscreen mode');
 
             L.DomEvent.disableClickPropagation(fullscreenButton);
             L.DomEvent.on(fullscreenButton, 'click', () => {
@@ -230,6 +228,7 @@ function createFullscreenControl(mapElement) {
 }
 
 // Функция для создания маркеров с попапами NEW
+// !проверить, есть сомнение об использовании!
 function createMarkersWithPopups(points, map, customIcon) {
     const markers = [];
 
@@ -240,7 +239,7 @@ function createMarkersWithPopups(points, map, customIcon) {
             icon: customIcon
         }).addTo(map);
 
-        // ВАЖНО: Создаем и привязываем попап
+        // Создаем и привязываем попап
         const popupContent = createPopupContent(point);
         marker.bindPopup(popupContent);
 
@@ -264,11 +263,11 @@ function createPointsControl(markers, map, title) {
 
     const PointsControl = L.Control.extend({
         onAdd: function(map) {
-            mapContainer = map.getContainer(); // Сохраняем контейнер
+            mapContainer = map.getContainer();
 
             const pointsButton = L.DomUtil.create('button', 'points-control');
             pointsButton.textContent = '📋';
-            pointsButton.title = title || 'Lista tačaka';
+            pointsButton.title = title || t('List of points');
 
             L.DomEvent.disableClickPropagation(pointsButton);
             L.DomEvent.on(pointsButton, 'click', () => {
@@ -297,13 +296,13 @@ function createPointsControl(markers, map, title) {
             header.className = 'side-panel-header';
 
             const titleElement = document.createElement('h3');
-            titleElement.textContent = title || 'Lista tačaka';
+            titleElement.textContent = title || t('List of points');
             header.appendChild(titleElement);
 
             const closeButton = document.createElement('button');
             closeButton.className = 'side-panel-close';
             closeButton.innerHTML = '×';
-            closeButton.title = 'Zatvori';
+            closeButton.title = t('Close');
             closeButton.addEventListener('click', () => {
                 this.closeSidePanel();
             });
@@ -344,7 +343,7 @@ function createPointsControl(markers, map, title) {
             if (markers.length === 0) {
                 const emptyMessage = document.createElement('div');
                 emptyMessage.className = 'side-panel-empty';
-                emptyMessage.textContent = 'Tačke nisu pronađene';
+                emptyMessage.textContent = t('Points not found');
                 list.appendChild(emptyMessage);
             } else {
                 markers.forEach(item => {
@@ -523,11 +522,11 @@ function createCustomZoomControl(map) {
 
             const zoomIn = L.DomUtil.create('button', 'zoom-btn zoom-in', zoomContainer);
             zoomIn.textContent = '+';
-            zoomIn.title = 'Увеличить/Uvećaj';
+            zoomIn.title = t('Zoom in');
 
             const zoomOut = L.DomUtil.create('button', 'zoom-btn zoom-out', zoomContainer);
             zoomOut.textContent = '−';
-            zoomOut.title = 'Уменьшить/Umanji';
+            zoomOut.title = t('Zoom out');
 
             L.DomEvent.disableClickPropagation(zoomContainer);
 
@@ -631,9 +630,9 @@ function initBaseMap(mapElementId, center, zoom) {
 
     // Создаем карту с правильными настройками
     const map = L.map(mapElementId, {
-        zoomControl: false, // Отключаем стандартный zoom контрол
+        zoomControl: false,
         attributionControl: true,
-        preferCanvas: true // Улучшает производительность на мобильных
+        preferCanvas: true
     }).setView(center, zoom);
 
     // Основной провайдер тайлов

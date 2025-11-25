@@ -59,12 +59,6 @@ function initWaterMap(points) {
             const group = L.featureGroup(markers.map(m => m.marker));
             map.fitBounds(group.getBounds().pad(0.1));
 
-            // Открываем первый попап
-            // setTimeout(() => {
-            //     if (markers[0] && markers[0].marker) {
-            //         markers[0].marker.openPopup();
-            //     }
-            // }, 500);
         } else {
             showDemoPoints(map, waterIcon);
         }
@@ -72,7 +66,7 @@ function initWaterMap(points) {
         // Добавляем элементы управления
         const mapElement = document.getElementById('water-map');
         addMapControls(map, markers, mapElement, {
-            pointsListTitle: 'Lista vodomata'
+            pointsListTitle: t('List of water points')'
         });
 
         // Адаптация для мобильных устройств
