@@ -66,7 +66,7 @@ function initWaterMap(points) {
         // Добавляем элементы управления
         const mapElement = document.getElementById('water-map');
         addMapControls(map, markers, mapElement, {
-            pointsListTitle: t('List of water points')'
+            pointsListTitle: t('List of water points')
         });
 
         // Адаптация для мобильных устройств
