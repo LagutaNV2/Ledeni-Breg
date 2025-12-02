@@ -142,7 +142,7 @@ https://opencagedata.com/ (бесплатная регистрация);
 - Производительность: Отсутствие лишних библиотек (React, TypeScript) уменьшает время загрузки страницы.
 - Быстрая разработки: Нет необходимости настраивать сложные инструменты (Webpack, Babel).
 
-# Выбор инструментов создания интерактивных карт
+## Выбор инструментов создания интерактивных карт
 Реализация в проекте: **OpenStreetMap + OpenCageData + Leaflet**.
 OpenCageData выполняет геокодирование (текст → координаты), а Leaflet отображает результат на карте.
 
@@ -199,7 +199,9 @@ Ledeni Breg/            # Django проект
   │   │   ├── __init__.py
   │   │   ├── base.py              # Общие настройки
   │   │   ├── development.py       # DEV настройки
-  │   │   └── production.py        # PROD настройки
+  │   │   └── production.py        # PROD настройки Render (демо)
+  │   │   └── production_vps.py    # PROD настройки VPS (рабочие)
+  |   |
   │   ├── urls.py                  # Главные URL-ы
   │   ├── asgi.py
   │   └── wsgi.py
@@ -313,6 +315,9 @@ Ledeni Breg/            # Django проект
   ├── build.sh                        # сборщик для Render
   ├── render.yaml                     # сборщик для Render
   ├── create_admin.py                 # для Render
+  |
+  ├── gunicorn_config.py              # настройки VPS
+  ├── create_admin.py
  ...
   ├── requirements.txt                # зависимости env
 ...
@@ -327,11 +332,13 @@ Ledeni Breg/            # Django проект
 ---
 
 ## 🚀 Режимы работы
-
-| Режим | Переменная `DEBUG` | Настройки | Используется |
-|------|-------------------|-----------|--------------|
-| **Разработка** | `DEBUG=True` | `settings/development.py` | Локальный сервер (`runserver`) |
-| **Продакшен** | `DEBUG=False` | `settings/production.py` | Render.com |
+```
+| Режим                 | Переменная `DEBUG` | Настройки                   | Используется                   |
+|-----------------------|--------------------|-----------------------------|--------------------------------|
+| **Разработка**        | `DEBUG=True`       | `settings/development.py`   | Локальный сервер (`runserver`) |
+| **Demo - Продакшен**  | `DEBUG=False`      | `settings/production.py`    | Render.com                     |
+| **Продакшен**         | `DEBUG=False`      | `settings/production_vps.py`| 5.188.118.217 -p 64022         |
+```
 
 > ✅ В `wsgi.py` автоматически выбирается нужный файл настроек по значению `DEBUG`.
 
@@ -343,7 +350,7 @@ Ledeni Breg/            # Django проект
 - Секретные данные (`SECRET_KEY`, `DATABASE_URL`, `ADMIN_PASSWORD`) хранятся в **переменных окружения**.
 - `.env`
 - На Render — переменные задаются через Dashboard.
-
+- PPS - SSL-сертификаты, изоляция переменных окруженияю
 ---
 
 ## 📦 Установка (локально)
@@ -362,7 +369,7 @@ PowerShell:
 
  venv/Scripts/activate
 
-## настройка переменных окружения
+## настройка переменных окружения (!!!!!)
 Содержимое `.env`:
 ```
 DEBUG=False
@@ -424,3 +431,264 @@ git push
 python manage.py migrate
 
 python manage.py seed_points
+
+
+#  VPS
+## Команды запуска приложения
+win + R wsl / Git Bush
+
+### вход и запуск служб
+```
+ssh nvlaguta2023@5.188.118.217 -p 64022
+cd LedeniBreg
+source venv/bin/activate
+
+
+ sudo systemctl daemon-reload
+
+ sudo systemctl start gunicorn
+ sudo systemctl enable gunicorn
+ sudo systemctl status gunicorn
+
+ sudo nginx -t
+ sudo systemctl start nginx
+ sudo systemctl enable nginx
+ sudo systemctl restart nginx
+ sudo systemctl status nginx
+```
+### Перезапуск служб:
+ ```
+ пересбор статики:
+ python manage.py collectstatic --noinput
+
+ sudo systemctl daemon-reload
+ sudo systemctl restart gunicorn
+ sudo systemctl restart nginx
+
+ проверка:
+ sudo systemctl status gunicorn
+ sudo systemctl status nginx
+ journalctl -u gunicorn
+ sudo tail -f /var/log/nginx/error.log
+ tail -f debug.log
+
+http://5.188.118.217
+```
+
+## Gunicorn настройки
+### sudo nano /etc/systemd/system/ledenibreg.service
+
+```
+Содержимое `ledenibreg.service`:
+[Unit]
+Description=Gunicorn daemon for Ledeni Breg
+After=network.target
+
+[Service]
+User=nvlaguta2023
+Group=nvlaguta2023
+WorkingDirectory=/home/nvlaguta2023/LedeniBreg
+Environment=PATH=/home/nvlaguta2023/LedeniBreg/venv/bin
+EnvironmentFile=/home/nvlaguta2023/LedeniBreg/.env
+ExecStart=/home/nvlaguta2023/LedeniBreg/venv/bin/gunicorn --bind unix:/tmp/gunicorn_ledenibreg.sock --w>
+ExecReload=/bin/kill -s HUP $MAINPID
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+or sudo cat /etc/systemd/system/gunicorn.service
+```
+[Unit]
+Description=Gunicorn daemon for Ledeni Breg
+After=network.target
+
+[Service]
+User=nvlaguta2023
+Group=nvlaguta2023
+WorkingDirectory=/home/nvlaguta2023/LedeniBreg
+Environment=PATH=/home/nvlaguta2023/LedeniBreg/venv/bin
+EnvironmentFile=/home/nvlaguta2023/LedeniBreg/.env
+ExecStart=/home/nvlaguta2023/LedeniBreg/venv/bin/gunicorn --bind unix:/tmp/gunicorn_ledenibreg.sock --w>
+ExecReload=/bin/kill -s HUP $MAINPID
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+###  cat gunicorn_config.py
+```
+bind = 'unix:/tmp/gunicorn_ledenibreg.sock'
+workers = 3
+worker_class = 'sync'
+worker_connections = 1000
+timeout = 120
+max_requests = 1000
+max_requests_jitter = 50
+
+# Логирование
+accesslog = '/var/log/gunicorn/access.log'
+errorlog = '/var/log/gunicorn/error.log'
+loglevel = 'info'
+
+# Безопасность
+raw_env = [
+    'DJANGO_SETTINGS_MODULE=ledenibreg.settings.production',
+]
+```
+### # Запускаем службу
+sudo systemctl start ledenibreg
+sudo systemctl enable ledenibreg
+
+## NGNIX настройки
+### sudo nano /etc/nginx/sites-available/ledenibreg
+```
+
+Содержимое конфига nginx:
+# HTTP redirect to HTTPS
+server {
+    listen 80;
+    server_name 5.188.118.217;
+    # return 301 https://$server_name$request_uri;
+    client_max_body_size 10M;
+
+    # Security headers (будут полезны и для HTTP)
+#    add_header X-Frame-Options "SAMEORIGIN" always;
+#    add_header X-Content-Type-Options "nosniff" always;
+#    add_header X-XSS-Protection "1; mode=block" always;
+#    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+
+    # Статические файлы
+    location /static/ {
+        alias /home/nvlaguta2023/LedeniBreg/staticfiles/;
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+        access_log off;
+    }
+
+    # Медиа файлы
+    location /media/ {
+        alias /home/nvlaguta2023/LedeniBreg/media/;
+        expires 1d;
+        add_header Cache-Control "public";
+        access_log off;
+    }
+
+    # Основное приложение
+    location / {
+        proxy_pass http://unix:/tmp/gunicorn_ledenibreg.sock;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $server_name;
+
+        proxy_connect_timeout 60s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+    }
+# Запрет доступа к скрытым файлам
+#    location ~ /\. {
+#        deny all;
+#        access_log off;
+#        log_not_found off;
+#    }
+
+    # Безопасность
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+}
+
+# HTTPS server
+#server {
+#    listen 443 ssl http2;
+#    server_name 5.188.118.217;
+
+    # SSL configuration  ПРОВЕРИТЬ НАЛИЧИЕ!!!
+#    ssl_certificate /etc/nginx/ssl/ledenibreg.crt;
+#    ssl_certificate_key /etc/nginx/ssl/ledenibreg.key;
+
+    # Modern SSL configuration
+#    ssl_protocols TLSv1.2 TLSv1.3;
+#    ssl_ciphers ECDHE-RSA-AES256-GCM-SHA512:DHE-RSA-AES256-GCM-SHA512:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-GCM-SHA384;
+#    ssl_prefer_server_ciphers off;
+#    ssl_session_cache shared:SSL:10m;
+#    ssl_session_timeout 1d;
+
+#    client_max_body_size 10M;
+
+    # Security headers
+#    add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
+#    add_header X-Frame-Options "SAMEORIGIN" always;
+#    add_header X-Content-Type-Options "nosniff" always;
+#    add_header X-XSS-Protection "1; mode=block" always;
+#    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+
+    # Статические файлы
+#    location /static/ {
+#        alias /home/nvlaguta2023/LedeniBreg/staticfiles/;
+#        expires 1y;
+#        add_header Cache-Control "public, immutable";
+#        access_log off;
+#    }
+
+    # Медиа файлы
+#    location /media/ {
+#        alias /home/nvlaguta2023/LedeniBreg/media/;
+#        expires 1d;
+#        add_header Cache-Control "public";
+#        access_log off;
+#    }
+
+    # Основное приложение
+#    location / {
+#        proxy_pass http://unix:/tmp/gunicorn_ledenibreg.sock;
+#        proxy_set_header Host $host;
+#        proxy_set_header X-Real-IP $remote_addr;
+#        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#        proxy_set_header X-Forwarded-Proto $scheme;
+#        proxy_set_header X-Forwarded-Host $server_name;
+
+#        proxy_connect_timeout 60s;
+#        proxy_send_timeout 60s;
+#        proxy_read_timeout 60s;
+
+        # WebSocket support (если нужно)
+#        proxy_http_version 1.1;
+#        proxy_set_header Upgrade $http_upgrade;
+#        proxy_set_header Connection "upgrade";
+#    }
+
+    # Запрет доступа к скрытым файлам
+#    location ~ /\. {
+#        deny all;
+#        access_log off;
+#        log_not_found off;
+#    }
+
+    # Favicon и robots.txt
+#    location = /favicon.ico {
+#        alias /home/nvlaguta2023/LedeniBreg/staticfiles/images/favicon.ico;
+#        access_log off;
+#        log_not_found off;
+#    }
+#    location = /robots.txt {
+#        alias /home/nvlaguta2023/LedeniBreg/staticfiles/robots.txt;
+#        access_log off;
+#        log_not_found off;
+#    }
+#}
+
+```
+### Активируем сайт
+sudo ln -s /etc/nginx/sites-available/ledenibreg /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
+
+
+## Если вы хотите полностью удалить старый файл и создать новый:
+sudo rm /var/log/gunicorn/error.log
+sudo rm /var/log/nginx/error.log
+sudo touch /var/log/gunicorn/error.log
+sudo touch /var/log/nginx/error.log
