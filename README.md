@@ -682,13 +682,16 @@ server {
 
 ```
 ### Активируем сайт
+```
 sudo ln -s /etc/nginx/sites-available/ledenibreg /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl restart nginx
-
+```
 
 ## Если вы хотите полностью удалить старый файл и создать новый:
+```
 sudo rm /var/log/gunicorn/error.log
 sudo rm /var/log/nginx/error.log
 sudo touch /var/log/gunicorn/error.log
 sudo touch /var/log/nginx/error.log
+```
