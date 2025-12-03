@@ -121,7 +121,7 @@ e-mail – поле типа e-mail,
 
 
 
-# сервис поиска в картах
+## сервис поиска в картах
 получение бесплатного API ключа (бесплатно 2500 запросов/день):
 https://opencagedata.com/ (бесплатная регистрация);
 
@@ -199,8 +199,7 @@ Ledeni Breg/            # Django проект
   │   │   ├── __init__.py
   │   │   ├── base.py              # Общие настройки
   │   │   ├── development.py       # DEV настройки
-  │   │   └── production.py        # PROD настройки Render (демо)
-  │   │   └── production_vps.py    # PROD настройки VPS (рабочие)
+  │   │   └── production.py        # PROD настройки Render (демо) (для  VPS см. далее уточнение)
   |   |
   │   ├── urls.py                  # Главные URL-ы
   │   ├── asgi.py
@@ -364,13 +363,85 @@ Ledeni Breg/            # Django проект
 # Прочая вспомогательная информация
 
 ## установка env
+```
 PowerShell:
  cd backend
-
  venv/Scripts/activate
+```
 
+
+# requirements (venv)
+pip freeze > requirements.txt
+
+pip install -r requirements.txt
+
+# запуск сервера в разработке
+python manage.py runserver
+
+Приложение: http://127.0.0.1:8000/
+Админ: http://127.0.0.1:8000/admin/
+
+ctr + shift + delete - очитска кеша в мозиле
+
+
+## GIT
+git add .
+
+git commit -a -m "update settigs v..."
+
+git push
+
+## запуск команд в разработке
+```
+Добавляем тестовые данные
+
+python manage.py migrate
+
+python manage.py seed_points
+```
+
+#  VPS
+## Команды запуска приложения
+win + R wsl / Git Bush
+
+### вход и запуск служб
+```
+ssh nvlaguta2023@5.188.118.217 -p 64022
+cd LedeniBreg
+source venv/bin/activate
+
+sudo systemctl daemon-reload
+
+sudo systemctl start gunicorn
+sudo systemctl enable gunicorn
+sudo systemctl status gunicorn
+
+sudo nginx -t
+sudo systemctl start nginx
+sudo systemctl enable nginx
+sudo systemctl restart nginx
+sudo systemctl status nginx
+```
+### Перезапуск служб:
+```
+ пересбор статики:
+ python manage.py collectstatic --noinput
+
+ sudo systemctl daemon-reload
+ sudo systemctl restart gunicorn
+ sudo systemctl restart nginx
+
+ проверка:
+ sudo systemctl status gunicorn
+ sudo systemctl status nginx
+ journalctl -u gunicorn
+ sudo tail -f /var/log/nginx/error.log
+ tail -f debug.log
+
+http://5.188.118.217
+```
 ## настройка переменных окружения (!!!!!)
-Содержимое `.env`:
+### Содержимое `.env`:
 ```
 DEBUG=False
 SECRET_KEY=ваш-очень-сложный-секретный-ключ
@@ -404,77 +475,126 @@ OPENCAGE_API_KEY=49ccc4bbc07e45788dc79eb85de14eb5
 
 ```
 
-# requirements (venv)
-pip freeze > requirements.txt
 
-pip install -r requirements.txt
-
-# запуск сервера в разработке
-python manage.py runserver
-
-Приложение: http://127.0.0.1:8000/
-Админ: http://127.0.0.1:8000/admin/
-
-ctr + shift + delete - очитска кеша в мозиле
-
-
-## GIT
-git add .
-
-git commit -a -m "update settigs v..."
-
-git push
-
-## запуск команд в разработке
-Добавляем тестовые данные
-
-python manage.py migrate
-
-python manage.py seed_points
-
-
-#  VPS
-## Команды запуска приложения
-win + R wsl / Git Bush
-
-### вход и запуск служб
+### nvlaguta2023@lb:~/LedeniBreg/ledenibreg/settings$ cat production.py
 ```
-ssh nvlaguta2023@5.188.118.217 -p 64022
-cd LedeniBreg
-source venv/bin/activate
+from .base import *
+import os
+from decouple import config
+import dj_database_url
+
+DEBUG = False
+
+SECRET_KEY = os.environ.get('SECRET_KEY', 'fallback-secret-key-for-debug-only')
+
+ALLOWED_HOSTS_STR = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1')
+if isinstance(ALLOWED_HOSTS_STR, str):
+    ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS_STR.split(',') if host.strip()]
+else:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
+# Для корректного определения протокола
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# База данных
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME', 'ledenibreg'),
+        'USER': os.environ.get('DB_USER', 'name_user...'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'password...'),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
+    }
+}
 
 
- sudo systemctl daemon-reload
+# E=mail settings
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
+EMAIL_HOST = os.environ.get('EMAIL_HOST', '...')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', ...))
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', '')
+APPLICATION_EMAIL = os.environ.get('APPLICATION_EMAIL', '')
 
- sudo systemctl start gunicorn
- sudo systemctl enable gunicorn
- sudo systemctl status gunicorn
+# Security settings
+SECURE_SSL_REDIRECT = False     # for change for SSL
+SESSION_COOKIE_SECURE = False     # for change for SSL
+CSRF_COOKIE_SECURE = False     # for change for SSL
 
- sudo nginx -t
- sudo systemctl start nginx
- sudo systemctl enable nginx
- sudo systemctl restart nginx
- sudo systemctl status nginx
+# for change for SSL:
+#SECURE_HSTS_SECONDS = 31536000
+#SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+#SECURE_HSTS_PRELOAD = True
+
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+
+# Для кастомных обработчиков ошибок
+CSRF_TRUSTED_ORIGINS = [
+    'https://5.188.118.217',
+    'https://ledenibreg.rs',
+    'https://www.ledenibreg.rs',
+]
+
+# Добавляем обработчики ошибок
+handler404 = 'apps.core.views.custom_404'
+handler500 = 'apps.core.views.custom_500'
+
+# WhiteNoise configuration
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Улучшенные настройки сжатия
+COMPRESS_ENABLED = True
+COMPRESS_OFFLINE = True
+
+# Увеличить таймауты
+GUNICORN_TIMEOUT = 120
+
+# Кэширование в памяти
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
+
+# Логирование
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'apps.applications': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}
+
 ```
-### Перезапуск служб:
- ```
- пересбор статики:
- python manage.py collectstatic --noinput
-
- sudo systemctl daemon-reload
- sudo systemctl restart gunicorn
- sudo systemctl restart nginx
-
- проверка:
- sudo systemctl status gunicorn
- sudo systemctl status nginx
- journalctl -u gunicorn
- sudo tail -f /var/log/nginx/error.log
- tail -f debug.log
-
-http://5.188.118.217
-```
-
 ## Gunicorn настройки
 ### sudo nano /etc/systemd/system/ledenibreg.service
 
@@ -536,7 +656,7 @@ raw_env = [
     'DJANGO_SETTINGS_MODULE=ledenibreg.settings.production',
 ]
 ```
-### # Запускаем службу
+###  Запускаем службу
 sudo systemctl start ledenibreg
 sudo systemctl enable ledenibreg
 
