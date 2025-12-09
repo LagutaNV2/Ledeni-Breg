@@ -90,6 +90,7 @@
     </div>
 
     <!-- Блок интерактивной карты -->
+    {% if has_map_access %}
     <div class="map-section">
         <div class="container">
             <h2 class="section-title">
@@ -109,6 +110,7 @@
             <div id="water-map" class="interactive-map"></div>
         </div>
     </div>
+    {% endif %}
 </section>
 {% endblock %}
 

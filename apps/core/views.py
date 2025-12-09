@@ -1,23 +1,42 @@
 # Django/backend/apps/core/views.py
-# Главная страница
+
+import os
+import logging
 
 from django.shortcuts import render, redirect
-from apps.map_points.models import MapPoint
-
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
 from django.utils import translation
 from django.template.loader import render_to_string
-from apps.applications.forms import ApplicationForm
-from apps.applications.models import Application
-
-import os
 from django.http import JsonResponse, HttpResponseNotFound
 
-import logging
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie
+
+from apps.applications.forms import ApplicationForm
+from apps.applications.models import Application
+from apps.map_points.models import MapPoint
 
 logger = logging.getLogger('apps.core')
+
+@cache_page(60 * 15)  # Кэширование на 15 минут
+@vary_on_cookie  # Разные версии для разных пользователей
+def water(request):
+    water_points = MapPoint.objects.filter(
+        machine_type='water',
+        is_active=True
+    )
+
+    context = {
+        'water_points': water_points,
+        'current_language': request.LANGUAGE_CODE,
+    }
+
+    return render(request, 'water/water.html', context)
+
 
 def home(request):
     current_language = request.COOKIES.get('django_language', 'sr')
@@ -162,7 +181,7 @@ def set_language(request):
 
         if language in [lang[0] for lang in settings.LANGUAGES]:
             translation.activate(language)
-            request.LANGUAGE_CODE = translation.get_language()
+            # request.LANGUAGE_CODE = translation.get_language()
 
             response = redirect(request.META.get('HTTP_REFERER', '/'))
             response.set_cookie('django_language', language, max_age=365*24*60*60)
@@ -179,6 +198,131 @@ def get_current_language(request):
     """Получает текущий язык из cookie или использует язык по умолчанию"""
     return request.COOKIES.get('django_language', 'sr')
 
+def register(request):
+    """Регистрация нового пользователя с обработкой ошибок"""
+    if request.user.is_authenticated:
+        return redirect('home')
+
+    # Получаем язык из куки
+    current_language = request.COOKIES.get('django_language', 'sr')
+
+    error = None
+    success = None
+
+    if request.method == 'POST':
+        try:
+            username = request.POST.get('username')
+            password1 = request.POST.get('password1')
+            password2 = request.POST.get('password2')
+
+            # Валидация
+            if not username or not password1 or not password2:
+                error = 'Заполните все поля' if current_language == 'ru' else 'Popunite sva polja'
+            elif password1 != password2:
+                error = 'Пароли не совпадают' if current_language == 'ru' else 'Lozinke se ne podudaraju'
+            elif len(password1) < 6:
+                error = 'Пароль должен быть не менее 6 символов' if current_language == 'ru' else 'Lozinka mora imati najmanje 6 karaktera'
+            elif len(username) < 3:
+                error = 'Имя пользователя должно быть не менее 3 символов' if current_language == 'ru' else 'Korisničko ime mora imati najmanje 3 karaktera'
+            else:
+                # Проверяем, существует ли пользователь
+                from django.contrib.auth.models import User
+                if User.objects.filter(username=username).exists():
+                    error = 'Пользователь с таким именем уже существует' if current_language == 'ru' else 'Korisnik sa ovim imenom već postoji'
+                else:
+                    # Создаем пользователя
+                    user = User.objects.create_user(
+                        username=username,
+                        password=password1
+                    )
+
+                    # Автоматический вход после регистрации
+                    login(request, user)
+
+                    # Сообщение об успехе
+                    messages.success(request,
+                        'Регистрация успешна! Добро пожаловать!' if current_language == 'ru'
+                        else 'Registracija uspešna! Dobrodošli!'
+                    )
+                    return redirect('home')
+
+        except Exception as e:
+            logger.error(f'Registration error: {e}')
+            error = 'Произошла ошибка при регистрации. Попробуйте позже.' if current_language == 'ru' else 'Došlo je do greške pri registraciji. Pokušajte kasnije.'
+
+    context = {
+        'error': error,
+        'success': success,
+        'current_language': current_language,  # Используем куки
+    }
+
+    return render(request, 'core/register.html', context)
+
+def quick_logout(request):
+    """Временный выход для тестирования"""
+    logout(request)
+    return redirect('home')
+
+def custom_login(request):
+    """Свой view для входа без ссылок на сброс пароля"""
+    # Если уже авторизован - на главную
+    if request.user.is_authenticated:
+        return redirect('home')
+
+    # Получаем язык из куки (как везде в проекте)
+    current_language = request.COOKIES.get('django_language', 'sr')
+
+    error = None
+    success = None
+
+    if request.method == 'POST':
+        try:
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+
+            # Проверяем, что оба поля заполнены
+            if not username or not password:
+                error = 'Заполните все поля' if current_language == 'ru' else 'Popunite sva polja'
+            else:
+                user = authenticate(request, username=username, password=password)
+
+                if user is not None:
+                    login(request, user)
+                    next_url = request.GET.get('next', 'home')
+
+                    # Добавляем сообщение об успехе
+                    messages.success(request,
+                        'Вы успешно вошли в систему!' if current_language == 'ru'
+                        else 'Uspešno ste se prijavili!'
+                    )
+                    return redirect(next_url)
+                else:
+                    error = 'Неверный логин или пароль' if current_language == 'ru' else 'Pogrešno korisničko ime ili lozinka'
+
+        except Exception as e:
+            # Логируем ошибку
+            logger.error(f'Login error: {e}')
+            error = 'Произошла ошибка при входе. Попробуйте позже.' if current_language == 'ru' else 'Došlo je do greške pri prijavi. Pokušajte kasnije.'
+
+    context = {
+        'error': error,
+        'success': success,
+        'current_language': current_language,  # Используем куки
+    }
+
+    return render(request, 'core/login.html', context)
+
+def custom_logout(request):
+    """Свой view для выхода"""
+    # Очищаем все сообщения перед выходом
+    from django.contrib.messages import get_messages
+    storage = get_messages(request)
+    for message in storage:
+        # Очищаем все сообщения
+        pass
+
+    logout(request)
+    return redirect('home')
 
 # отладочная функция для проверки подключения к базе данных
 def debug_database(request):

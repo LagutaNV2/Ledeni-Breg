@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="login-page">
+    <div class="login-container">
+        <h1 class="login-title">{% if current_language == 'ru' %}Вход{% else %}Prijava{% endif %}</h1>
+
+        <!-- Сообщения об ошибках и успехе -->
+        {% if messages %}
+        <div class="login-messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if error %}
+        <div class="alert alert-danger">
+            <strong>{% if current_language == 'ru' %}Ошибка:{% else %}Greška:{% endif %}</strong> {{ error }}
+        </div>
+        {% endif %}
+
+        {% if success %}
+        <div class="alert alert-success">
+            {{ success }}
+        </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">
+                    {% if current_language == 'ru' %}Имя пользователя{% else %}Korisničko ime{% endif %}
+                </label>
+                <input type="text" name="username" id="username" class="form-control"
+                       value="{{ request.POST.username|default:'' }}"
+                       required autofocus>
+            </div>
+            <div class="form-group">
+                <label for="password">
+                    {% if current_language == 'ru' %}Пароль{% else %}Lozinka{% endif %}
+                </label>
+                <input type="password" name="password" id="password" class="form-control" required>
+            </div>
+            <button type="submit" class="login-button">
+                {% if current_language == 'ru' %}Войти{% else %}Prijavi se{% endif %}
+            </button>
+        </form>
+
+        <!-- Кнопки навигации -->
+        <div class="login-links">
+            <p class="login-link">
+                {% if current_language == 'ru' %}
+                    Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a>
+                {% else %}
+                    Nemate nalog? <a href="{% url 'register' %}">Registrujte se</a>
+                {% endif %}
+            </p>
+
+            <p class="login-link">
+                <a href="{% url 'home' %}" class="link-home">
+                    ← {% if current_language == 'ru' %}На главную{% else %}Na početnu{% endif %}
+                </a>
+            </p>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

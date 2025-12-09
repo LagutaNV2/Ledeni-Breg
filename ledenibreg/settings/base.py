@@ -45,6 +45,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'apps.core.middleware.MapAccessCacheMiddleware',
 ]
 
 ROOT_URLCONF = 'ledenibreg.urls'
@@ -65,6 +66,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'apps.core.context_processors.language_context',
+                'apps.core.context_processors.map_access_context',
             ],
         },
     },
@@ -98,3 +100,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Настройка доступа к картам
+MAP_ACCESS_REQUIRED = config('MAP_ACCESS_REQUIRED', default=True, cast=bool)

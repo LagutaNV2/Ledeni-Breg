@@ -46,18 +46,41 @@
             </ul>
         </nav>
 
-        <!-- Действия (Viber + язык) -->
+        <!-- Действия (Viber + язык + логин) -->
         <div class="header-actions">
             <a href="viber://chat?number=+381677898477" class="viber-call">
                 <span class="viber-text">📞 Viber: 067/789-8477</span>
                 <span class="viber-icon">📞</span>
             </a>
 
-            <div class="language-switcher">
-                {% comment %} <select>
-                    <option value="sr">SR</option>
-                    <option value="ru">RU</option>
-                </select> {% endcomment %}
+            <div class="auth-section">
+                {% if user.is_authenticated %}
+                    <div class="user-info">
+                        <span class="welcome-text">
+                            👤 {{ user.username }}
+                        </span>
+
+                        <!-- ФОРМА ВЫХОДА (POST запрос) -->
+                        <form action="{% url 'logout' %}" method="post" class="logout-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-auth btn-logout">
+                                {% if current_language == 'ru' %} Выйти{% else %} Izloguj se{% endif %}
+                            </button>
+                        </form>
+                    </div>
+                {% else %}
+                    <div class="auth-buttons">
+                        <a href="{% url 'login' %}" class="btn-auth btn-login">
+                            {% if current_language == 'ru' %}🔑 Войти{% else %}🔑 Prijavi se{% endif %}
+                        </a>
+                        <a href="{% url 'register' %}" class="btn-auth btn-register">
+                            {% if current_language == 'ru' %} Регистрация{% else %} Registracija{% endif %}
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+
+             <div class="language-switcher">
                 <form method="post" action="{% url 'set_language' %}" id="language-form">
                     {% csrf_token %}
                     <select name="language">

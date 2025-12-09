@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="login-page">
+    <div class="login-container">
+        <h1>{% if current_language == 'ru' %}Регистрация{% else %}Registracija{% endif %}</h1>
+
+        <!-- Сообщения -->
+        {% if messages %}
+        <div class="login-messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if error %}
+        <div class="alert alert-danger">
+            <strong>{% if current_language == 'ru' %}Ошибка:{% else %}Greška:{% endif %}</strong> {{ error }}
+        </div>
+        {% endif %}
+
+        {% if success %}
+        <div class="alert alert-success">
+            {{ success }}
+        </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="username">
+                    {% if current_language == 'ru' %}Имя пользователя{% else %}Korisničko ime{% endif %} *
+                </label>
+                <input type="text" name="username" id="username" class="form-control"
+                       value="{{ request.POST.username|default:'' }}"
+                       required autofocus
+                       minlength="3">
+                <small class="form-text">
+                    {% if current_language == 'ru' %}
+                        Минимум 3 символа
+                    {% else %}
+                        Minimum 3 karaktera
+                    {% endif %}
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label for="password1">
+                    {% if current_language == 'ru' %}Пароль{% else %}Lozinka{% endif %} *
+                </label>
+                <input type="password" name="password1" id="password1" class="form-control"
+                       required minlength="6">
+                <small class="form-text">
+                    {% if current_language == 'ru' %}
+                        Минимум 6 символов
+                    {% else %}
+                        Minimum 6 karaktera
+                    {% endif %}
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label for="password2">
+                    {% if current_language == 'ru' %}Подтвердите пароль{% else %}Potvrdite lozinku{% endif %} *
+                </label>
+                <input type="password" name="password2" id="password2" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="terms" required>
+                    <label class="form-check-label" for="terms">
+                        {% if current_language == 'ru' %}
+                            Я согласен с условиями использования
+                        {% else %}
+                            Slažem se sa uslovima korišćenja
+                        {% endif %}
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="login-button">
+                {% if current_language == 'ru' %}Зарегистрироваться{% else %}Registrujte se{% endif %}
+            </button>
+        </form>
+
+        <!-- Кнопки навигации -->
+        <div class="login-links">
+            <p class="login-link">
+                {% if current_language == 'ru' %}
+                    Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a>
+                {% else %}
+                    Već imate nalog? <a href="{% url 'login' %}">Prijavite se</a>
+                {% endif %}
+            </p>
+
+            <p class="login-link">
+                <a href="{% url 'home' %}" class="link-home">
+                    ← {% if current_language == 'ru' %}На главную{% else %}Na početnu{% endif %}
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

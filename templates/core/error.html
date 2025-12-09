@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/error.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="error-page">
+    <div class="error-container">
+        <h1>⚠️ {% if current_language == 'ru' %}Ошибка{% else %}Greška{% endif %}</h1>
+
+        <div class="alert alert-danger">
+            <p><strong>{% if current_language == 'ru' %}Что-то пошло не так{% else %}Nešto je pošlo naopako{% endif %}</strong></p>
+            <p>{% if current_language == 'ru' %}Пожалуйста, попробуйте позже{% else %}Molimo pokušajte kasnije{% endif %}</p>
+        </div>
+
+        <div class="error-actions">
+            <a href="{% url 'home' %}" class="btn btn-primary">
+                {% if current_language == 'ru' %}На главную{% else %}Na početnu{% endif %}
+            </a>
+            <a href="javascript:history.back()" class="btn btn-secondary">
+                {% if current_language == 'ru' %}Назад{% else %}Nazad{% endif %}
+            </a>
+        </div>
+
+        {% if debug %}
+        <div class="error-details" style="display:none;">
+            <h3>Детали ошибки:</h3>
+            <pre>{{ exception }}</pre>
+        </div>
+        <button onclick="document.querySelector('.error-details').style.display='block'" class="btn btn-link">
+            {% if current_language == 'ru' %}Показать детали{% else %}Prikaži detalje{% endif %}
+        </button>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

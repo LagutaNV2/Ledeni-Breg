@@ -126,6 +126,55 @@
     text-align: center;
 }
 
+/* Регистрация и логин */
+.error-page {
+    padding: 60px 20px;
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+}
+
+.error-container {
+    max-width: 500px;
+    width: 100%;
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.error-container h1 {
+    color: #dc3545;
+    margin-bottom: 30px;
+}
+
+.error-actions {
+    margin-top: 30px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.error-actions .btn {
+    padding: 12px 24px;
+    min-width: 120px;
+}
+
+.error-details {
+    margin-top: 30px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 5px;
+    text-align: left;
+    font-family: monospace;
+    font-size: 12px;
+    overflow-x: auto;
+}
+
+
 /* Адаптивность */
 @media (max-width: 768px) {
     .error-content h1 {

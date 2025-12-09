@@ -13,7 +13,9 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
     <!-- Page-specific CSS -->
-    {% block extra_css %}{% endblock %}
+    {% block extra_css %}
+        <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+    {% endblock %}
 
     <!-- Language data for JavaScript -->
     <script>

@@ -44,6 +44,10 @@ DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='webmaster@localhost')
 # Email для заявок
 APPLICATION_EMAIL = config('APPLICATION_EMAIL', default='n.v.laguta2023@gmail.com')
 
+# Для статических файлов в разработке
+STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 # Логирование для отладки
 LOGGING = {
     'version': 1,
@@ -90,10 +94,6 @@ LOGGING = {
         },
     },
 }
-
-# Для статических файлов в разработке
-STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # логирование текущих email настроек для отладки:
 print("=== EMAIL SETTINGS ===")
