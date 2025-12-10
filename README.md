@@ -7,7 +7,9 @@
 Регион - Сербия.
 
 https://ledeni-breg.onrender.com
+
 http://127.0.0.1:8000/
+
 http://127.0.0.1:8000/admin/
 
 ## Цели сайта
@@ -25,7 +27,8 @@ http://127.0.0.1:8000/admin/
  - интерактивная карта с автоматами при наличии доступа.
 
  Доступ к блоку карт регулируется админом через админку.
- Пользователи будут делиться на три группы: с полным доступом к картам, без доступа, и неавторизованные.Предусмотрена возможность отключить систему раздельного доступа через настройку в settings.
+ Пользователи будут делиться на три группы: с полным доступом к картам, без доступа,  неавторизованные.
+ Предусмотрена возможность отключить систему раздельного доступа через настройку в settings.
 
 ## 🛠️ Технологии
 
@@ -451,12 +454,12 @@ http://5.188.118.217
 ```
 DEBUG=False
 SECRET_KEY=ваш-очень-сложный-секретный-ключ
-ALLOWED_HOSTS=5.188.118.217,localhost,127.0.0.1
+ALLOWED_HOSTS=5.188.118.217,ledenibreg.rs,www.ledenibreg.rs,localhost,127.0.0.1
 
 DJANGO_SETTINGS_MODULE=ledenibreg.settings.production
 
-# Доступ к карте только для авторизованных пользователей ( True режим ограничения включен)
-MAP_ACCESS_REQUIRED = False
+# Доступ к карте только для авторизованных пользователей ( True - режим ограничения включен)
+MAP_ACCESS_REQUIRED = True
 
 # База данных
 DB_NAME=ledenibreg
@@ -469,7 +472,7 @@ ADMIN_EMAIL=n.v.laguta2023@gmail.com
 ADMIN_PASSWORD=...
 ADMIN_USERNAME=ledenibreg_prod_admin
 
-# Email настройки (теперь будут работать!)
+# Email настройки
 EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
@@ -605,28 +608,7 @@ LOGGING = {
 
 ```
 ## Gunicorn настройки
-### sudo nano /etc/systemd/system/ledenibreg.service
-
-```
-Содержимое `ledenibreg.service`:
-[Unit]
-Description=Gunicorn daemon for Ledeni Breg
-After=network.target
-
-[Service]
-User=nvlaguta2023
-Group=nvlaguta2023
-WorkingDirectory=/home/nvlaguta2023/LedeniBreg
-Environment=PATH=/home/nvlaguta2023/LedeniBreg/venv/bin
-EnvironmentFile=/home/nvlaguta2023/LedeniBreg/.env
-ExecStart=/home/nvlaguta2023/LedeniBreg/venv/bin/gunicorn --bind unix:/tmp/gunicorn_ledenibreg.sock --w>
-ExecReload=/bin/kill -s HUP $MAINPID
-Restart=on-failure
-
-[Install]
-WantedBy=multi-user.target
-```
-or sudo cat /etc/systemd/system/gunicorn.service
+### sudo cat /etc/systemd/system/gunicorn.service
 ```
 [Unit]
 Description=Gunicorn daemon for Ledeni Breg
