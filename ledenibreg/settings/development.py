@@ -47,6 +47,7 @@ APPLICATION_EMAIL = config('APPLICATION_EMAIL', default='n.v.laguta2023@gmail.co
 # Для статических файлов в разработке
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Логирование для отладки
 LOGGING = {

@@ -6,6 +6,9 @@ from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent  # /home/nvlaguta2023/LedeniBreg
+STATIC_ROOT = PROJECT_ROOT / 'staticfiles'
+
 # SECRET_KEY = 'django-insecure-dev-key-change-in-production'
 SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-key-only-for-local')  # Только для разработки
 
@@ -24,11 +27,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Наши приложения
-    # 'apps.core',
-    # 'apps.news',
-    # 'apps.contacts',
-    # 'apps.map_points',
-    # 'apps.applications',
     'apps.core.apps.CoreConfig',
     'apps.news.apps.NewsConfig',
     'apps.contacts.apps.ContactsConfig',
@@ -38,7 +36,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    #'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -93,8 +91,8 @@ LANGUAGES = [
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / '../static']
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATIC_ROOT = BASE_DIR / 'staticfiles'
+# перенесно вверх
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'

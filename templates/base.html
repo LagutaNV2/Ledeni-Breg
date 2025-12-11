@@ -9,8 +9,8 @@
     <title>{% block title %}Ledeni Breg{% endblock %}</title>
     <link rel="icon" type="image/svg+xml" href="{% static 'images/logo.svg' %}">
 
-    <!-- Base CSS -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- Base CSS with Version of static(!) -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20251212">
 
     <!-- Page-specific CSS -->
     {% block extra_css %}
