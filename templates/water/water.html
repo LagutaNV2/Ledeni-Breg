@@ -5,7 +5,6 @@
 {% block title %}Vodomat - Ledeni Breg{% endblock %}
 
 {% block extra_css %}
-{% comment %} <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" /> {% endcomment %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 
 <link rel="stylesheet" href="{% static 'css/map.css' %}">
@@ -15,15 +14,35 @@
 {% block content %}
 <section class="water-page">
     <!-- Секция с фоном волн: заголовок + фото + информация -->
-    <div class="water-content-with-bg">
-        <div class="water-bg-wrap">
-            <div class="water-bg" aria-hidden="true"
+    {% comment %} <div class="water-content-with-bg"> {% endcomment %}
+    <div class="water-bg-wrapper">
+
+        {% comment %} <div class="water-bg-wrap"> {% endcomment %}
+
+        <!-- Фон с проверкой загрузки -->
+        <div class="water-background">
+            {% comment %} <div class="water-bg" aria-hidden="true"
                 style="background-image: url('{% static 'images/full_water-bg.png' %}');">
+            </div> {% endcomment %}
+
+            <!-- PNG фон (основной) -->
+            <div class="water-bg-png"
+                 style="background-image: url('{% static 'images/full_water-bg.png' %}');"
+                 role="presentation"
+                 aria-hidden="true">
             </div>
+
+            <!-- SVG fallback (скрыт по умолчанию) -->
+            <div class="water-bg-svg" role="presentation" aria-hidden="true">
+                <img src="{% static 'images/waves.svg' %}" alt="" class="water-svg">
+            </div>
+
+            <!-- Градиентный оверлей -->
+            <div class="water-overlay"></div>
         </div>
 
         <!-- Контент поверх фона -->
-        <div class="container">
+        <div class="container water-content">
             <!-- Герой секция с заголовком -->
             <div class="hero-content">
                 <h1 class="page-title">
@@ -115,46 +134,54 @@
 {% endblock %}
 
 {% block extra_js %}
-{% comment %} <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script> {% endcomment %}
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script src="{% static 'js/map-common.js' %}"></script>
 <script src="{% static 'js/water-map.js' %}"></script>
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const page = document.querySelector('.water-page');
-    const testImg = new Image();
+    // Функция проверки загрузки фона
+    function checkWaterBackground() {
+        const pngBg = document.querySelector('.water-bg-png');
+        const svgBg = document.querySelector('.water-bg-svg');
+        const wrapper = document.querySelector('.water-background');
 
-    testImg.onload = function() {
-        console.log('✅ PNG background loaded successfully.');
-    };
+        // Создаем тестовое изображение для проверки PNG
+        const testImg = new Image();
 
-    testImg.onerror = function() {
-        console.warn('⚠️ PNG background failed to load, switching to SVG fallback.');
-        page.classList.add('bg-fallback');
+        testImg.onload = function() {
+            console.log('✅ PNG background loaded successfully');
+            // PNG загрузился - показываем PNG, скрываем SVG
+            pngBg.style.display = 'block';
+            svgBg.style.display = 'none';
+            wrapper.classList.remove('bg-fallback');
+            wrapper.classList.add('bg-loaded');
+        };
 
-        // Безопасное создание SVG фона без innerHTML
-        const svgWrap = document.createElement('div');
-        svgWrap.className = 'water-bg-wrap';
+        testImg.onerror = function() {
+            console.warn('⚠️ PNG background failed to load, switching to SVG fallback');
+            // PNG не загрузился - показываем SVG
+            pngBg.style.display = 'none';
+            svgBg.style.display = 'block';
+            wrapper.classList.add('bg-fallback');
+            wrapper.classList.remove('bg-loaded');
+        };
 
-        const innerDiv = document.createElement('div');
-        innerDiv.className = 'water-bg';
+        // Проверяем загрузку PNG
+        testImg.src = "{% static 'images/full_water-bg.png' %}";
+    }
 
-        const svgImg = document.createElement('img');
-        svgImg.src = "{% static 'images/waves.svg' %}";
-        svgImg.alt = '';
-        svgImg.className = 'water-svg';
+    document.addEventListener("DOMContentLoaded", function() {
+        checkWaterBackground();
 
-        innerDiv.appendChild(svgImg);
-        svgWrap.appendChild(innerDiv);
-        page.prepend(svgWrap);
-    };
-
-    // Проверяем загрузку PNG
-    testImg.src = "{% static 'images/full_water-bg.png' %}";
-});
+        // Также проверяем при изменении размера окна
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(checkWaterBackground, 250);
+        });
+    });
 </script>
 <script>
-        // Безопасная передача данных из Django в JavaScript
+    // Безопасная передача данных из Django в JavaScript
     const waterPoints = [
         {% for point in water_points %}
         {

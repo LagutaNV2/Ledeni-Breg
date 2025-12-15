@@ -1,87 +1,96 @@
-/* backend/static/css/water.css */
-
-/* Основной фон страницы игрушек - PNG как основной */
+/* ===== ОСНОВНАЯ СТРУКТУРА ===== */
 .water-page {
-    min-height: 100vh;
-    background: url('../images/full-water-bg.png') no-repeat center center fixed;
-    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 35px); /* Учитываем хедер */
 }
 
-/* === FALLBACK: если PNG не загрузился === */
-.water-page.bg-fallback {
-    background: none !important; /* отключаем неработающий PNG */
-}
-
-/* Добавим мягкий переход при смене фона */
-.water-page,
-.water-page.bg-fallback {
-    transition: background 0.6s ease-in-out;
-}
-
-/* Секция с фоном волн */
-.water-content-with-bg {
+/* Фоновый враппер, который растягивается до карты */
+.water-bg-wrapper {
+    flex: 1;
     position: relative;
-    padding: 1.5rem 0 2.5rem;
-    overflow: hidden;
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Стили для SVG фона как fallback - скрываем на десктопе где работает PNG */
-.water-content-with-bg .water-bg-wrap {
+/* Контейнер фона */
+.water-background {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     z-index: 1;
-    min-height: auto;
-    /* Скрываем SVG на десктопе, показываем только при проблемах с PNG */
-    display: none;
-}
-
-.water-bg-wrap {
-    position: relative;
-    width: 100%;
-    height: 100%;
     overflow: hidden;
 }
 
-.water-bg {
+/* PNG фон (основной) */
+.water-bg-png {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    pointer-events: none;
     z-index: 1;
+    display: block; /* По умолчанию показываем PNG */
 }
 
+/* SVG фон (fallback) */
+.water-bg-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    display: none; /* По умолчанию скрыт */
+    background: linear-gradient(180deg, #ffffff 0%, #e6f0ff 40%, #b3d4ff 100%);
+    overflow: hidden;
+}
+
+/* Стили для SVG изображения */
 .water-svg {
-    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
     width: 160%;
     max-width: none;
     height: auto;
-    transform: translateX(-50%);
-    left: 50%;
+    min-height: 200px;
+}
+
+/* Градиентный оверлей для красивого оттенка */
+.water-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.3) 0%,
+        rgba(74, 144, 226, 0.1) 40%,
+        rgba(30, 60, 114, 0.15) 100%
+    );
+    z-index: 3;
+    pointer-events: none;
+}
+
+/* Контент поверх фона */
+.water-content {
     position: relative;
-    bottom: -2px;
+    z-index: 4;
+    flex: 1;
+    padding-top: 1.5rem;
+    padding-bottom: 2.5rem;
 }
 
-
-.water-content-with-bg .container {
-    position: relative;
-    z-index: 2;
-}
-
-/* Прозрачность для контентных блоков */
-.water-page .automat-content,
-.water-page .content-block {
-    background: rgba(255, 255, 255, 0.60);
-    backdrop-filter: blur(10px);
-}
-
-/* Герой секция с заголовком */
+/* ===== СТИЛИ КОНТЕНТА ===== */
 .hero-content {
     text-align: center;
     margin-bottom: 2rem;
@@ -128,7 +137,6 @@
         0 0 0 1px rgba(255, 255, 255, 0.9),
         0 0 40px rgba(74, 144, 226, 0.15);
     backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.95);
     transition: all 0.4s ease;
     position: relative;
 }
@@ -197,7 +205,7 @@
     text-align: left;
 }
 
-/* Блок инструкции (опцтонно) */
+/* ===== Блок инструкции (опцтонно) ====== */
 .instruction-section {
     background: #f8f9fa;
     padding: 3rem 0;
@@ -231,26 +239,47 @@
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 }
 
-/* Медиа-запросы для адаптивного фона */
+/* ===== МЕДИАЗАПРОСЫ ===== */
 
-/* На мобильных устройствах показываем SVG фон и скрываем PNG */
+/* Планшеты */
+@media (max-width: 1024px) {
+    .automat-content {
+        gap: 2.5rem;
+        padding: 2.5rem;
+    }
+
+    .page-title {
+        font-size: 2rem;
+    }
+
+    .water-svg {
+        width: 180%;
+    }
+}
+
+/* Мобильные устройства */
 @media (max-width: 768px) {
     .water-page {
-        background: none; /* Убираем PNG на мобильных */
+        min-height: calc(100vh - 25px);
     }
 
-    .water-content-with-bg .water-bg-wrap {
-        display: block; /* Показываем SVG на мобильных */
-        background: linear-gradient(
-            180deg,
-            #ffffff 0%,
-            #e6f0ff 40%,
-            #b3d4ff 100%
-        );
+    .water-bg-wrapper {
+        min-height: 500px;
     }
 
-    .water-content-with-bg {
+    .water-content {
         padding: 1rem 0 1.5rem;
+    }
+
+    .automat-content {
+        flex-direction: column;
+        gap: 2rem;
+        padding: 2rem;
+        margin: 0 1rem;
+    }
+
+    .automat-img {
+        max-height: 280px;
     }
 
     .page-title {
@@ -261,60 +290,33 @@
         font-size: 1rem;
     }
 
-    .automat-content {
-        flex-direction: column;
-        gap: 2rem;
-        padding: 2.5rem 2rem;
-        border-radius: 15px;
-        box-shadow:
-            0 10px 30px rgba(30, 60, 114, 0.15),
-            0 5px 15px rgba(30, 60, 114, 0.1);
-    }
-
-    .automat-img {
-        max-height: 280px;
-        box-shadow:
-            0 30px 60px rgba(0, 0, 0, 0.15),
-            0 10px 40px rgba(74, 144, 226, 0.2);
-    }
-
     .automat-text h2 {
         font-size: 1.5rem;
-        text-align: center;
     }
 
     .water-svg {
         width: 220%;
-        bottom: -8px;
+        bottom: -5px;
     }
 }
 
-/* Fallback для случаев когда PNG не загружается */
-@media (min-width: 769px) {
-    /* Если PNG не загрузился, показываем SVG фон */
-    .water-page:not(.png-loaded) .water-bg-wrap {
-        display: block;
-        background: linear-gradient(
-            180deg,
-            #ffffff 0%,
-            #e6f0ff 40%,
-            #b3d4ff 100%
-        );
-    }
-}
-
+/* Маленькие мобильные */
 @media (max-width: 480px) {
+    .water-bg-wrapper {
+        min-height: 450px;
+    }
+
+    .automat-content {
+        padding: 1.5rem;
+        margin: 0 0.5rem;
+    }
+
     .page-title {
         font-size: 1.5rem;
     }
 
     .hero-subtitle {
         font-size: 0.95rem;
-    }
-
-    .automat-content {
-        padding: 1.25rem 0.75rem;
-        gap: 1.25rem;
     }
 
     .automat-img {
@@ -328,63 +330,32 @@
     .text-content p {
         font-size: 1rem;
     }
+
 }
 
-/* Блок инструкции (опционально) */
-.instruction-section {
-    background: #f8f9fa;
-    padding: 3rem 0;
-}
-
-.instruction-block {
-    background: white;
-    padding: 2rem;
-    border-radius: 15px;
-    box-shadow:
-        0 5px 20px rgba(30, 60, 114, 0.1),
-        0 0 0 1px rgba(74, 144, 226, 0.05),
-        0 0 20px rgba(74, 144, 226, 0.08);
-    max-width: 700px;
-    margin: 0 auto;
-    border: 1px solid rgba(255, 255, 255, 0.9);
-}
-
-.instruction-block h2 {
-    text-align: center;
-    color: #1e3c72;
-    font-size: 1.7rem;
-    margin-bottom: 1.5rem;
-    font-weight: 600;
-}
-
-.instruction-image {
-    max-width: 100%;
-    height: auto;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-}
-
-@media (max-width: 768px) {
-    .instruction-section {
-        padding: 2rem 0;
+/* Ландшафтная ориентация на мобильных */
+@media (max-width: 768px) and (orientation: landscape) {
+    .water-bg-wrapper {
+        min-height: 400px;
     }
 
-    .instruction-block {
-        padding: 1.25rem;
-        border-radius: 12px;
-    }
-
-    .instruction-block h2 {
-        font-size: 1.3rem;
+    .automat-content {
+        flex-direction: row;
+        gap: 1.5rem;
+        padding: 1.5rem;
     }
 }
 
-@media (max-width: 480px) {
-    .instruction-block {
-        padding: 1rem;
+/* Высокие экраны */
+@media (min-height: 900px) {
+    .water-bg-wrapper {
+        min-height: 700px;
     }
+}
 
-    .instruction-block h2 {
-        font-size: 1.2rem;
+/* Адаптация для очень широких экранов */
+@media (min-width: 1600px) {
+    .water-svg {
+        width: 140%;
     }
 }

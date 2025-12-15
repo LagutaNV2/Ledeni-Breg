@@ -345,7 +345,7 @@ Ledeni Breg/            # Django проект
 |-----------------------|--------------------|-----------------------------|--------------------------------|
 | **Разработка**        | `DEBUG=True`       | `settings/development.py`   | Локальный сервер (`runserver`) |
 | **Demo - Продакшен**  | `DEBUG=False`      | `settings/production.py`    | Render.com                     |
-| **Продакшен**         | `DEBUG=False`      | `settings/production_vps.py`| 5.188.118.217 -p 64022         |
+| **Продакшен**         | `DEBUG=False`      | `settings/production.py`    | 5.188.118.217 -p 64022         |
 ```
 
 > ✅ В `wsgi.py` автоматически выбирается нужный файл настроек по значению `DEBUG`.
