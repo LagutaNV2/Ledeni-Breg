@@ -71,11 +71,11 @@
                 {% else %}
                     <div class="auth-buttons">
                         <a href="{% url 'login' %}" class="btn-auth btn-login">
-                            {% if current_language == 'ru' %}🔑 Войти{% else %}🔑 Prijavi se{% endif %}
+                            {% if current_language == 'ru' %}👤 Войти{% else %}👤 Prijavi se{% endif %}
                         </a>
-                        <a href="{% url 'register' %}" class="btn-auth btn-register">
+                        {% comment %} <a href="{% url 'register' %}" class="btn-auth btn-register">
                             {% if current_language == 'ru' %} Регистрация{% else %} Registracija{% endif %}
-                        </a>
+                        </a> {% endcomment %}
                     </div>
                 {% endif %}
             </div>
