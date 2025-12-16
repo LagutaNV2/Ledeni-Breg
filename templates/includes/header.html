@@ -57,14 +57,15 @@
                 {% if user.is_authenticated %}
                     <div class="user-info">
                         <span class="welcome-text">
-                            👤 {{ user.username }}
+                            👤 {{ user.username|truncatechars:15 }}
                         </span>
 
                         <!-- ФОРМА ВЫХОДА (POST запрос) -->
                         <form action="{% url 'logout' %}" method="post" class="logout-form">
                             {% csrf_token %}
-                            <button type="submit" class="btn-auth btn-logout">
-                                {% if current_language == 'ru' %} Выйти{% else %} Izloguj se{% endif %}
+                            <button type="submit" class="btn-auth btn-logout"
+                                    title="{% if current_language == 'ru' %}Выйти{% else %}Izloguj se{% endif %}">
+                                ↪️
                             </button>
                         </form>
                     </div>

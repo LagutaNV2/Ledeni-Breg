@@ -394,11 +394,20 @@ ctr + shift + delete - очитска кеша в мозиле
 
 
 ## GIT
+### push
 git add .
 
 git commit -a -m "update settigs v..."
 
 git push
+
+
+### Клонирование проекта
+cd /var/www/ledenibreg
+
+git clone https://github.com/LagutaNV2/Ledeni-Breg.git .
+
+
 
 ## запуск команд в разработке
 ```
@@ -434,6 +443,12 @@ sudo systemctl status nginx
 ### Перезапуск служб:
 ```
  пересбор статики:
+ rm -rf staticfiles/
+
+ python manage.py collectstatic --clear --noinput --settings=ledenibreg.settings.production
+
+ or
+
  python manage.py collectstatic --noinput
 
  sudo systemctl daemon-reload
